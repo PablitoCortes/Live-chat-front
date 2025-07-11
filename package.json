@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@types/cookie-parser": "^1.4.8",
+    "cookie-parser": "^1.4.7",
+    "express-validator": "^7.2.1"
+  },
+  "devDependencies": {
+    "@types/express-validator": "^2.20.33"
+  }
+}

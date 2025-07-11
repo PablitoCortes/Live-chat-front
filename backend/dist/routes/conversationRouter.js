@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const conversationController_1 = require("../controllers/conversationController");
+const checkExistingConversation_1 = require("../middlewares/checkExistingConversation");
+const checkParticipantsExists_1 = require("../middlewares/checkParticipantsExists");
+const authUser_1 = require("../middlewares/authUser");
+const conversationRouter = (0, express_1.Router)();
+conversationRouter.post("/create", authUser_1.authUser, checkParticipantsExists_1.checkParticipantsExists, checkExistingConversation_1.checkExistingConversation, conversationController_1.createConversation);
+conversationRouter.get("/", authUser_1.authUser, conversationController_1.getUserConversations);
+conversationRouter.delete("/:conversationId", authUser_1.authUser, conversationController_1.deleteUserConversation);
+conversationRouter.get("/:conversationId", authUser_1.authUser, conversationController_1.getConversation);
+exports.default = conversationRouter;

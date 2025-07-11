@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const userController_1 = require("../controllers/userController");
+const checkExistingUser_1 = require("../middlewares/checkExistingUser");
+const authUser_1 = require("../middlewares/authUser");
+const validateEmail_1 = require("../middlewares/validateEmail");
+const userRouter = (0, express_1.Router)();
+userRouter.post("/register", validateEmail_1.validateEmail, checkExistingUser_1.checkExistingUser, userController_1.registerUser);
+userRouter.post("/login", validateEmail_1.validateEmail, userController_1.loginUser);
+userRouter.post("/logout", userController_1.LogoutUser);
+userRouter.get("/profile", authUser_1.authUser, userController_1.getUserProfile);
+userRouter.put("/profile/update", authUser_1.authUser, userController_1.updateAccount);
+userRouter.delete("/delete", authUser_1.authUser, userController_1.deleteUserAccount);
+userRouter.get("/contacts", authUser_1.authUser, userController_1.getContacts);
+userRouter.put("/contacts/add", authUser_1.authUser, userController_1.addContact);
+userRouter.delete("/contacts/:contactId", authUser_1.authUser, userController_1.deleteContact);
+exports.default = userRouter;
