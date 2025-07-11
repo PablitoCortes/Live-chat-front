@@ -1,0 +1,17 @@
+{
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "bradlc.vscode-tailwindcss",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "bradlc.vscode-tailwindcss"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "bradlc.vscode-tailwindcss"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
+} 

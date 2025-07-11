@@ -1,0 +1,57 @@
+'use client';
+
+import { LoginData} from '@/interfaces/User';
+import { ChangeEvent, useState } from 'react';
+import { useRouter } from "next/navigation"
+import { useUser } from '@/context/UserContext';
+
+const Login = () => {
+  const router = useRouter();
+  const [loginData, setLoginData] = useState<LoginData>({
+    email: '',
+    password: '',
+  });
+   
+  const { login } = useUser()
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await login(loginData.email,loginData.password);
+      alert('Login exitoso');
+      router.push("/home")
+    } catch (err) {
+      console.error('Error al iniciar sesión:', err);
+      alert('Error al iniciar sesión. Por favor, verifica tus credenciales.');
+    }
+  };
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault()
+    const { name, value } = event.target;
+    setLoginData({
+      ...loginData,
+      [name]: value,
+    });
+  };
+
+  return (
+    <div className="flex flex-col items-center bg-gray-500">
+      <h1>Login</h1>
+      <form className="flex flex-col bg-amber-600" onSubmit={handleSubmit}>
+        <label htmlFor="email">email or username</label>
+        <input
+          type="text"
+          placeholder="email or username"
+          onChange={handleInputChange}
+          name="email"
+        />
+        <label htmlFor="password">password</label>
+        <input type="password" placeholder="*****" onChange={handleInputChange} name="password" />
+        <button>Login</button>
+      </form>
+    </div>
+  );
+};
+
+export default Login;
