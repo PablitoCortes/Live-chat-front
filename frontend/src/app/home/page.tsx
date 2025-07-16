@@ -1,15 +1,11 @@
 "use client"
-import { useEffect, useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { UserIcon, Contact, Settings, MessageCircleMoreIcon} from "lucide-react"
 import Aside from "@/components/Aside/Aside";
 import { AsideVariant } from "@/components/Aside/Aside";
 import Chat from "@/components/Chat/Chat";
-import { useUser } from "@/context/UserContext";
-import { useConversation } from "@/context/ConversationContext";
-import { useContacts } from "@/context/ContactContext";
 
-// Componente de debug temporal
+
 
 const Home = () => { 
 
@@ -20,7 +16,7 @@ const Home = () => {
   }; 
 
   return (
-  <div className="flex min-h-screen w-full text-white">
+  <div className="flex w-screen text-white ">
     <section className="min-w-[5%] min-h-[100%] flex flex-col items-center py-10 gap-4 bg-secondary">
       <div className="flex flex-col gap-4">
       <button onClick={()=>handleAsideChange(AsideVariant.Chat)}>

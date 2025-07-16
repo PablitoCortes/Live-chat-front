@@ -19,6 +19,8 @@ interface ConversationContextType {
   selectedConversationMessages: Message[];
   setSelectedConversation: (conversation: Conversation | null) => void;
   setSelectedConversationMessages: (messages: Message[]) => void;
+  setConversations: (messages: Conversation[]) => void;
+
   isConversationLoading: boolean;
   isSelectedConversationLoading: boolean;
   isMessagesLoading: boolean;
@@ -76,6 +78,7 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
           setConversations([]);
           return;
         }
+        console.log(res)
         setConversations(res.data);
       } catch (err) {
         console.error("Error al cargar conversaciones:", err);
@@ -86,23 +89,18 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
     getConversations();
   }, []);
 
-useEffect(() => {
-  const onConversationCreated = async ({ conversationId }: { conversationId: string }) => {
-    try {
-      const conv = await conversationService.getConversation(conversationId);
-      setConversations(prev => [...prev, conv.data]);
-      setSelectedConversationState(conv)
-    } catch (err) {
-      console.error("Error al obtener conversación creada:", err);
-    }
-  };
-
-  socket.on("conversation created", onConversationCreated);
-
-  return () => {
-    socket.off("conversation created", onConversationCreated);
-  };
-}, []);
+// useEffect(() => {
+//   const onConversationCreated = async ({ conversationId }: { conversationId: string }) => {
+//     try {
+//       const conv = await conversationService.getConversation(conversationId);
+//       setConversations(prev => [...prev, conv.data]);
+//       setSelectedConversationState(conv)
+//     } catch (err) {
+//       console.error("Error al obtener conversación creada:", err);
+//     }
+//   };
+//   onConversationCreated()
+// }, []);
 
   return (
 
@@ -112,6 +110,7 @@ useEffect(() => {
       selectedConversationMessages,
       setSelectedConversation,
       setSelectedConversationMessages,
+      setConversations,
       isConversationLoading,
       isSelectedConversationLoading,
       isMessagesLoading

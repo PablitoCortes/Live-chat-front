@@ -78,11 +78,11 @@ export const Chat = () => {
 
   if (!selectedConversation) {
     return (
-      <main className="w-[70%] flex flex-col bg-secondary">
+      <main className="w-[70%] flex flex-col bg-secondary h-screen">
         <div className="relative top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-center text-white text-lg font-semibold">
           Selecciona una conversación Para empezar
         </div>
-        <section className="w-full min-h-[85%] px-5 bg-[url('/images/darkbackground.svg')] bg-cover bg-center pt-8"></section>
+        <section className="w-full h-[100%] px-5 bg-[url('/images/darkbackground.svg')] bg-cover bg-center pt-8"></section>
       </main>
     );
   }
@@ -96,13 +96,13 @@ export const Chat = () => {
   );
 
   return (
-    <main className="w-[70%] flex flex-col bg-secondary">
+    <main className="w-[70%] flex flex-col bg-secondary h-screen">
       
-      <header className="w-full border-1 min-h-[8%] bg-primary flex items-center px-4 font-semibold text-lg text-white">
+      <header className="w-full border-1 h-[8%] bg-primary flex items-center px-4 font-semibold text-lg text-white">
         {otherParticipant?.name}
       </header>
       
-      <section className="w-full min-h-[85%] px-5 bg-[url('/images/darkbackground.svg')] bg-cover bg-center pt-8 flex flex-col-reverse gap-2 overflow-y-auto">
+      <section className="w-full h-[86%] px-5 bg-[url('/images/darkbackground.svg')] bg-cover bg-center pt-8 flex flex-col-reverse gap-2 overflow-y-auto overflow-x-hidden">
         {selectedConversationMessages.map((message) => {
           if (message.sender === user?._id) {
             return <MessageBubble key={message._id}  variant="sender"> {message.content} </MessageBubble>
