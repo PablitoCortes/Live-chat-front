@@ -1,10 +1,10 @@
 import { RegisterData, LoginData, User } from '@/interfaces/User';
 import axios from 'axios';
 
-const USER_API_URL = process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:3000/api/users';
+const USER_API_URL = process.env.NEXT_PUBLIC_USER_API_URL;
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 export const userService = {
   register: async (data: RegisterData) => {

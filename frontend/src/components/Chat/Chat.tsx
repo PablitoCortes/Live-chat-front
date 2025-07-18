@@ -61,23 +61,27 @@ export const Chat = () => {
       conversationId: selectedConversation._id,
     };
     socket.emit("new message", newMessage);
-    setMessage((prev) => ({
-      ...prev,
-      content: "",
-    }));
+    
   };
 
   useEffect(() => {
     const handleNewMessage = (newMessage: Message) => {
       if (newMessage.conversationId === selectedConversation?._id) {
-        setSelectedConversationMessages([...selectedConversationMessages, newMessage]);
+        console.log(newMessage)
+        setSelectedConversationMessages(prevMessages => [...prevMessages, newMessage]);
       }
     };
     socket.on("message created", handleNewMessage);
     return () => {
       socket.off("message created", handleNewMessage);
     };
-  }, [selectedConversation?._id, setSelectedConversationMessages]);
+  }, [selectedConversation?._id]);
+  
+
+  useEffect(() => {
+    console.log(selectedConversationMessages)
+  }, [selectedConversationMessages]);
+    
 
   if (!selectedConversation) {
     return (
