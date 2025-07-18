@@ -12,6 +12,7 @@ import ConversationModel from './models/ConversationModel';
 import UserModel from './models/UserModel';
 
 
+
 const PORT: number = parseInt(process.env.PORT || "3000");
 
 const server = createServer(app);
@@ -181,6 +182,8 @@ io.on("connection", async (socket: CustomSocket) => {
 
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
+}).on('error', (err) => {
+  console.error('Error starting server:', err);
 });
 
 
