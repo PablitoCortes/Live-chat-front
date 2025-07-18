@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { User } from "@/interfaces/User";
 import { userService } from "@/services/userService";
+import { useRouter } from "next/navigation";
 
 interface UserContextType {
   user: User | null;
@@ -16,6 +17,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
+
  
  useEffect(() => {
     const loadUserProfile = async () => {

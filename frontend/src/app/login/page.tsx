@@ -2,23 +2,21 @@
 
 import { LoginData} from '@/interfaces/User';
 import { ChangeEvent, useState } from 'react';
-import { useRouter } from "next/navigation"
 import { useUser } from '@/context/UserContext';
+import { useRouter } from 'next/navigation';
 
 const Login = () => {
-  const router = useRouter();
   const [loginData, setLoginData] = useState<LoginData>({
     email: '',
     password: '',
   });
    
   const { login } = useUser()
-
+  const router = useRouter()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login(loginData.email,loginData.password);
-      alert('Login exitoso');
+      await login(loginData.email, loginData.password);
       router.push("/home")
     } catch (err) {
       console.error('Error al iniciar sesión:', err);

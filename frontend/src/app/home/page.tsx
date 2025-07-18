@@ -16,8 +16,8 @@ const Home = () => {
   }; 
 
   return (
-  <div className="flex w-screen text-white ">
-    <section className="min-w-[5%] min-h-[100%] flex flex-col items-center py-10 gap-4 bg-secondary">
+  <div className="flex w-screen h-screen text-white ">
+    <section className="min-w-[5%] h-full flex flex-col items-center py-10 gap-4 bg-secondary">
       <div className="flex flex-col gap-4">
       <button onClick={()=>handleAsideChange(AsideVariant.Chat)}>
         <MessageCircleMoreIcon size={29} />
@@ -36,8 +36,8 @@ const Home = () => {
       </div>
       </section>
       <Aside variant={asideMode}/>
-      <Chat></Chat>
-  </div>
+      <Chat/>
+      </div>
   ) 
 };
 

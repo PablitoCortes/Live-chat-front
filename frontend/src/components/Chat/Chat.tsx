@@ -61,10 +61,13 @@ export const Chat = () => {
       conversationId: selectedConversation._id,
     };
     socket.emit("new message", newMessage);
+    setMessage((prev) => ({
+      ...prev,
+      content: "",
+    }));
   };
 
   useEffect(() => {
-
     const handleNewMessage = (newMessage: Message) => {
       if (newMessage.conversationId === selectedConversation?._id) {
         setSelectedConversationMessages([...selectedConversationMessages, newMessage]);
@@ -111,11 +114,11 @@ export const Chat = () => {
         })}
       </section>
 
-      <div className="w-full h-[6%] flex justify-between items-center border-t px-4 pb-2 gap-4">
-        <button className="w-[5%]">
+      <div className="w-full h-[6%] flex justify-between items-center px-4 py-2  mb-2 gap-4">
+        <button className="w-[5%] flex justify-center">
           <Plus />
         </button>
-        <button className="w-[5%]">
+        <button className="w-[5%] flex justify-center">
           <Laugh />
         </button>
         <input
@@ -123,7 +126,8 @@ export const Chat = () => {
           name="content"
           value={message.content}
           placeholder="Start typing"
-          className="w-[80%] bg-input rounded-3xl px-4 py-2 focus:outline-none focus:ring-0"
+          autoComplete="off"
+          className="w-[80%] bg-input rounded-3xl px-4 py-2 focus:outline-none focus:ring-0 flex justify-center"
           onChange={handleInputChange}
           onKeyDown={(e) => e.key === "Enter" && submitMessage(e)}
         />

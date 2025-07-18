@@ -8,6 +8,8 @@ import { UserConnection } from './interfaces/UserConnection';
 import { createConversationService } from './services/conversationService';
 import { authSocket } from './middlewares/authSocket';
 import { createMessageService } from './services/messageService';
+import ConversationModel from './models/ConversationModel';
+import UserModel from './models/UserModel';
 
 
 const PORT: number = parseInt(process.env.PORT || "3000");
@@ -56,52 +58,85 @@ io.on("connection", async (socket: CustomSocket) => {
     userConversations?.forEach(conversation => {
       socket.join(conversation._id.toString());
     });
+
     socket.on("new conversation", async (data) => {
-      try {
-        const { participants } = data;
+    const { participants } = data; 
 
-        if (!participants.includes(userId)) {
-          socket.emit("error", "No tienes permiso para crear esta conversación");
-          return;
-        }
+    if (!participants.includes(userId)) {
+      socket.emit("authError", {
+      source: "newConversation",
+      reason: "unauthorized",
+      message: "You are not authorized to create this conversation",
+    });
+    return;
+    }
+    if (!Array.isArray(participants) || participants.length < 2) {
+      socket.emit("newConversationError", {
+      source: "newConversation",
+      reason: "invalid_participants",
+      message: "invalid participant data",
+    });
+    return;
+    }
 
-        const conversationData = {
-          participants,
-          creationDate: new Date()
-        };
+    const recipientId = participants.find((id: string) => id !== userId);
+    const recipient = await UserModel.findById(recipientId);
+    if (!recipient) {
+      socket.emit("newConversationError", {
+        source: "newConversation",
+        reason: "user_not_found",
+        message: "User no longer available",
+      });
+      return;
+    }
+
+    const existing = await ConversationModel.findOne({
+      participants: { $all: participants },
+    });
+
+    if (existing) {
+      socket.emit("newConversationError", {
+        source: "newConversation",
+        reason: "already_exists",
+        message: "conversation already exist",
+        conversationId: existing._id,
+        conversation: existing
+      });
+      return;
+    }
+      const conversationData = {
+        participants,
+        creationDate: new Date()
+      };
 
         const newConversation = await createConversationService(conversationData);
 
         if (!newConversation) {
-          socket.emit("error", "Error al crear la conversación");
+          socket.emit("authError", {
+          source: "newConversation",
+          reason: "unauthorized",
+          message: "Debes estar logueado para crear una conversación",
+          });
           return;
         }
 
-        socket.join(newConversation.id);
-
+      socket.join(newConversation.id);
+      
         participants.forEach((participantId: string) => {
           const participantSocket = connectedUsers.get(participantId);
-          if (!participantSocket) {
-            socket.emit("error", "Error creating the conversation")
-            return 
-          }
+          if (participantSocket) {
             io.to(participantSocket.socketId).emit("conversation created", {
-              conversationId: newConversation._id,
-              participants
-            });
+              conversation: newConversation
+            })
+          }
         });
         socket.emit("conversation joined", {
           conversationId: newConversation._id,
           participants,
           newConversation
         });
-
-      } catch (error) {
-        console.error("Error al crear nueva conversación:", error);
-        socket.emit("error", "Error al crear la conversación");
-      }
+      
     });
-
     socket.on("new message", async (message) => {
       try {
         const sender = socket.user?.userId;
