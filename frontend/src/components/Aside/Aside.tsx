@@ -28,7 +28,6 @@ const Aside: React.FC<AsideProps> = ({ variant }) => {
 		e.preventDefault()
 		setIsContactModal(!isContactModal)
 	}
-	console.log(conversations)
 	if (userLoading || (variant === AsideVariant.Contact && contactsLoading) || (variant === AsideVariant.Chat && isConversationLoading)) {
 		return <AsideSkeleton />
 	}

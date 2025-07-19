@@ -167,6 +167,7 @@ io.on("connection", async (socket: CustomSocket) => {
           return;
         }
         io.to(message.conversationId).emit("message created", newMessage);
+        console.log(newMessage)
 
       } catch (err) {
         console.error("Error creating message", err);

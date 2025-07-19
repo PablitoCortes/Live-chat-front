@@ -61,6 +61,7 @@ export const Chat = () => {
       conversationId: selectedConversation._id,
     };
     socket.emit("new message", newMessage);
+    console.log(selectedConversationMessages)
     setMessage((prev) => ({
       ...prev,
       content: "",
