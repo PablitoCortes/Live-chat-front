@@ -11,14 +11,13 @@ import { Conversation } from "@/interfaces/Conversation";
 import { conversationService } from "@/services/conversationService";
 import { Message } from "@/interfaces/Message";
 import { messageService } from "@/services/messageService";
-import { socket } from "@/socket/socket";
 
 interface ConversationContextType {
   conversations: Conversation[];
   selectedConversation: Conversation | null;
   selectedConversationMessages: Message[];
   setSelectedConversation: (conversation: Conversation | null) => void;
-  setSelectedConversationMessages: (messages: Message[]) => void;
+  setSelectedConversationMessages: React.Dispatch<React.SetStateAction<Message[]>>;
   setConversations: (messages: Conversation[]) => void;
 
   isConversationLoading: boolean;
@@ -57,8 +56,7 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
       setSelectedConversationState(conv.data);
       
       const messages = await messageService.getConversationMessages(conversationId);
-      setSelectedConversationMessages(messages.data.messages || []);
-
+      setSelectedConversationMessages(messages.data.messages);
     } catch (err) {
       console.error("Error Loading chat", err);
       setSelectedConversationState(conversation);
@@ -69,6 +67,7 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
     }
   }, []);
 
+
   useEffect(() => {
     const getConversations = async () => {
       setIsConversationLoading(true);
@@ -78,7 +77,6 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
           setConversations([]);
           return;
         }
-        console.log(res)
         setConversations(res.data);
       } catch (err) {
         console.error("Error al cargar conversaciones:", err);
