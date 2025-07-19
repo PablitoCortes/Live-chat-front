@@ -4,8 +4,8 @@ import {
   useContext,
   useState,
   useCallback,
-  useEffect,
   ReactNode,
+  useEffect,
 } from "react";
 import { Conversation } from "@/interfaces/Conversation";
 import { conversationService } from "@/services/conversationService";
@@ -19,6 +19,7 @@ interface ConversationContextType {
   setSelectedConversation: (conversation: Conversation | null) => void;
   setSelectedConversationMessages: React.Dispatch<React.SetStateAction<Message[]>>;
   setConversations: (messages: Conversation[]) => void;
+  getConversations:()=>void,
 
   isConversationLoading: boolean;
   isSelectedConversationLoading: boolean;
@@ -67,8 +68,6 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
     }
   }, []);
 
-
-  useEffect(() => {
     const getConversations = async () => {
       setIsConversationLoading(true);
       try {
@@ -84,8 +83,10 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
         setIsConversationLoading(false);
       }
     };
-    getConversations();
-  }, []);
+ 
+  useEffect(() => {
+    getConversations()
+  },[])
 
 // useEffect(() => {
 //   const onConversationCreated = async ({ conversationId }: { conversationId: string }) => {
@@ -111,7 +112,8 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
       setConversations,
       isConversationLoading,
       isSelectedConversationLoading,
-      isMessagesLoading
+      isMessagesLoading,
+      getConversations
     }}>
       {children}
     </ConversationContext.Provider>

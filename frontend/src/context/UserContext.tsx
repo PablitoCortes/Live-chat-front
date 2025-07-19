@@ -2,7 +2,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { User } from "@/interfaces/User";
 import { userService } from "@/services/userService";
-import { useRouter } from "next/navigation";
 
 interface UserContextType {
   user: User | null;
@@ -10,18 +9,18 @@ interface UserContextType {
   setUser: (user: User | null) => void;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  loadUserProfile: ()=>void
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
  
- useEffect(() => {
     const loadUserProfile = async () => {
-      setLoading(true);
       try {
         const res = await userService.getProfile();
         if (res && res.data) {
@@ -33,10 +32,11 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } finally {
         setLoading(false);
       }
-    };
-
-    loadUserProfile();
-  }, []);
+  };
+  
+  useEffect(() => {
+    loadUserProfile()
+  },[])
 
   const login = async (email: string, password: string) => {
     setLoading(true);
@@ -64,7 +64,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <UserContext.Provider value={{ user, loading, setUser, login, logout }}>
+    <UserContext.Provider value={{ user, loading, setUser, login, loadUserProfile, logout }}>
       {children}
     </UserContext.Provider>
   );

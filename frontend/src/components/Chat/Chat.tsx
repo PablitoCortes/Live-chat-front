@@ -70,8 +70,7 @@ export const Chat = () => {
   useEffect(() => {
     const handleNewMessage = (newMessage: Message) => {
       if (newMessage.conversationId === selectedConversation?._id) {
-        console.log(newMessage)
-        setSelectedConversationMessages(prevMessages => [...prevMessages, newMessage]);
+        setSelectedConversationMessages(prevMessages => [ newMessage, ...prevMessages ]);
       }
     };
     socket.on("message created", handleNewMessage);

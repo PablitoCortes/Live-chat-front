@@ -27,7 +27,16 @@ const config: Config = {
         "muted":"#746868",
         "plain":"#9ea2a8",
         "important":"#ffeadf"
-      }
+      },
+      keyframes: {
+        fadeIn: {
+           '0%': { opacity: "0", transform: 'translateY(8px)' },
+          '100%': { opacity: "1", transform: 'translateY(0)' },
+        }
+      },
+       animation: {
+        fadeIn: 'fadeIn 0.3s ease-out',
+      },
     },
   },
   plugins: [],

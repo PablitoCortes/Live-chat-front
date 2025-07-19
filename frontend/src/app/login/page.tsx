@@ -1,26 +1,40 @@
 'use client';
 
 import { LoginData} from '@/interfaces/User';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useContext, useState } from 'react';
 import { useUser } from '@/context/UserContext';
 import { useRouter } from 'next/navigation';
+import { useConversation } from '@/context/ConversationContext';
+import { useContacts } from '@/context/ContactContext';
 
 const Login = () => {
   const [loginData, setLoginData] = useState<LoginData>({
     email: '',
     password: '',
   });
+  const [loading,setLoading]= useState(false)
    
-  const { login } = useUser()
+  const { login, loadUserProfile } = useUser()
+  const { getConversations } = useConversation()
+  const {getUserContacts} =useContacts()
+  
   const router = useRouter()
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true)
     try {
       await login(loginData.email, loginData.password);
-      router.push("/home")
+      await loadUserProfile() 
+      await getConversations()
+      await getUserContacts()
+      router.push("/home");
     } catch (err) {
       console.error('Error al iniciar sesión:', err);
       alert('Error al iniciar sesión. Por favor, verifica tus credenciales.');
+    }
+    finally {
+      setLoading(false)
     }
   };
 
@@ -33,6 +47,11 @@ const Login = () => {
     });
   };
 
+  if (loading) {
+    return (
+      <h1>Loading...</h1>
+    )
+  }
   return (
     <div className="flex flex-col items-center bg-gray-500">
       <h1>Login</h1>

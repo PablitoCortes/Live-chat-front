@@ -1,5 +1,5 @@
 "use client"
-import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, useCallback,useEffect } from 'react';
 import { User } from '@/interfaces/User';
 import { userService } from '@/services/userService';
 
@@ -8,6 +8,7 @@ interface ContactContextType {
   isLoading: boolean;
   addContact: (contactEmail: string) => Promise<void>;
   deleteContact: (contactId: string) => Promise<void>;
+  getUserContacts: () => void;
 }
 
 const ContactContext = createContext<ContactContextType | undefined>(undefined);
@@ -16,7 +17,7 @@ export const ContactProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [contacts, setContacts] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
+ 
     const getUserContacts = async () => {  
       setIsLoading(true);
       try {
@@ -33,9 +34,11 @@ export const ContactProvider: React.FC<{ children: ReactNode }> = ({ children })
         setIsLoading(false);
       }
     }
+ 
+    useEffect(() => {
     getUserContacts()
-  }, []);
-
+  },[])
+  
   const addContact = useCallback(async (contactEmail: string) => {
     setIsLoading(true);
     try {
@@ -70,7 +73,8 @@ export const ContactProvider: React.FC<{ children: ReactNode }> = ({ children })
       contacts, 
       isLoading, 
       addContact, 
-      deleteContact 
+      deleteContact,
+      getUserContacts
     }}>
       {children}
     </ContactContext.Provider>

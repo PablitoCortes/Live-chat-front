@@ -34,7 +34,7 @@ const NewConversationModal = () => {
 	}
 
   return (
-    <div className="absolute top-full mt-2 left-0 z-50   shadow-xl rounded bg-primary flex flex-col gap-2 p-2">
+    <div className="absolute top-full mt-2 left-0 z-50   shadow-xl rounded bg-primary flex flex-col gap-2 p-2 animate-fadeIn">
       <div className="flex items-center bg-input rounded-lg">
 				<div className="pl-3">
 					<Search size={20} className="text-gray-500" />
