@@ -6,7 +6,6 @@ import { userService } from "@/services/userService";
 interface UserContextType {
   user: User | null;
   setUser: (user: User | null) => void;
-  isLoginComplete: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   isProfileLoaded:boolean;
@@ -17,40 +16,37 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   
   const [user, setUser] = useState<User | null>(null);
-  const [isLoginComplete, setIsLoginComplete] = useState(false);
   const [isProfileLoaded, setIsProfileLoaded] = useState(false);
   
   
+  const loadUserProfile = async () => {
+  try {
+    const res = await userService.getProfile();
+    if (res?.data) {
+      setUser(res.data);
+    }
+  }catch {
+  if (!user) setUser(null);
+  }
+ finally {
+    setIsProfileLoaded(true);
+  }
+};
+
   useEffect(() => {
-    const loadUserProfile = async () => {
-      try {
-        const res = await userService.getProfile();
-        if (res && res.data) {
-          setUser(res.data);
-          setIsProfileLoaded(true);
-        }
-        setIsProfileLoaded(false)
-      } catch (err) {
-        setUser(null)
-        setIsProfileLoaded(false);
-      } 
-  };  
     loadUserProfile()
   },[])
 
   const login = async (email: string, password: string) => {
-    setIsLoginComplete(false);
     try {
       const res = await userService.login({ email, password });
-      if (!res || !res.data?.user) {
-        setUser(null);
-        return;
+      if (res && res.data?.user) {
+        setIsProfileLoaded(false)
+      } else {
+        setUser(null)
       }
-      setUser(res.data.user);
     } catch (err) {
       throw err;
-    } finally {
-      setIsLoginComplete(true);
     }
   };
 
@@ -64,7 +60,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <UserContext.Provider value={{ user, isLoginComplete, setUser, login, logout,isProfileLoaded }}>
+    <UserContext.Provider value={{ user, setUser, login, logout,isProfileLoaded }}>
       {children}
     </UserContext.Provider>
   );

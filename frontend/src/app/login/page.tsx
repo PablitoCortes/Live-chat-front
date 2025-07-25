@@ -1,26 +1,29 @@
 'use client';
 
 import { LoginData} from '@/interfaces/User';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useUser } from '@/context/UserContext';
 import { useRouter } from 'next/navigation';
 
 
 const Login = () => {
+
   const [loginData, setLoginData] = useState<LoginData>({
     email: '',
     password: '',
   });
    
-  const { user, login, isLoginComplete } = useUser()
+  const { user, login, isProfileLoaded } = useUser()
+  const [loginLoading, setLoginLoading] = useState(false)
   
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoginLoading(true)
     try {
       await login(loginData.email, loginData.password);
-      if(user && !isLoginComplete)
+      setLoginLoading(false)
       router.push("/home");
     } catch (err) {
       console.error('Error al iniciar sesión:', err);
@@ -37,9 +40,10 @@ const Login = () => {
     });
   };
 
-  if (isLoginComplete) {
+
+  if (loginLoading===true) {
     return (
-      <h1>Loading...</h1>
+      <>Cargando...</>
     )
   }
   return (

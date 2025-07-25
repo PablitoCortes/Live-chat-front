@@ -29,10 +29,10 @@ const Aside: React.FC<AsideProps> = ({ variant }) => {
 		e.preventDefault()
 		setIsContactModal(!isContactModal)
 	}
-	if (isProfileLoaded === false || (variant === AsideVariant.Contact && !isContactsLoading) || (variant === AsideVariant.Chat && !isConversationLoading)) {
+	if (isProfileLoaded===false) {
 		return <AsideSkeleton />
 	}
-	if (variant === AsideVariant.Contact) {
+	if (variant === AsideVariant.Contact && !isContactsLoading) {
 		return (
 			<div className="min-w-[25%] md:min-w-[465px] flex justify-center bg-primary">
 				<aside className="w-[90%] flex flex-col min-h-[100%]">

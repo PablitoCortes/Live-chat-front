@@ -1,22 +1,26 @@
-'use client'
+// 'use client'
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useUser } from "@/context/UserContext";
+// import { useEffect } from "react";
+// import { useRouter } from "next/navigation";
+// import { useUser } from "@/context/UserContext";
 
-const Page = () => {
-  const router = useRouter();
-  const { user, isProfileLoaded } = useUser();
+// const Page = () => {
+//   const router = useRouter();
+//   const { user, isProfileLoaded } = useUser();
 
-  useEffect(() => {
-    if (user?._id && isProfileLoaded) {
-      router.replace("/home");
-    } else {
-      router.replace("/login"); 
-    }
-  }, [user, isProfileLoaded, router]);
 
-  return null;
-};
+//   useEffect(() => {
+//     if (!isProfileLoaded) {
+//       return
+//     }
+//     if (user) {
+//       router.replace("/login");
+//     } else {
+//       router.replace("/login"); 
+//     }
+//   }, [user, isProfileLoaded, router]);
 
-export default Page;
+//   return null;
+// };
+
+// export default Page;

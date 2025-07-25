@@ -73,14 +73,16 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
       const getConversations = async () => {
       setIsConversationLoading(true);
       try {
-        if(user?._id && isProfileLoaded){
+        if(user?._id && isProfileLoaded===true){
           const res = await conversationService.getUserConversations();
-          if (!res || !res.data) {
-            setConversations([]);
+          if (res || res.data) {
+            setConversations(res.data);
+            setIsSelectedConversationLoading(false)
             return;
+          } else {
+            setConversations([]);
+            setIsConversationLoading(false);
           }
-          setConversations(res?.data);
-          setIsConversationLoading(false);
         }
       } catch (err) {
         console.error("Error al cargar conversaciones:", err);
@@ -92,7 +94,6 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
   
     
   return (
-
     <ConversationContext.Provider value={{
       conversations,
       selectedConversation,

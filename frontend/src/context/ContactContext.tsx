@@ -23,18 +23,21 @@ export const ContactProvider: React.FC<{ children: ReactNode }> = ({ children })
     setIsContactsLoading(true);
     const getUserContacts = async () => { 
       try {
-        if(user?._id && isProfileLoaded){
+        if(user?._id && isProfileLoaded===true){
         const res = await userService.getContacts();
-        if (!res || !res.data) {
-          setContacts([]);
-          return;
-        }
-        setContacts(res.data);
+        if (res || res.data) {
+          setContacts(res.data);
+          setIsContactsLoading(false)
+          }
+        else {
+          setContacts([])
+          setIsContactsLoading(false)
+          return
+          }
         }
       } catch (err) {
         console.error('Error obteniendo contactos:', err);
         setContacts([]);
-        setIsContactsLoading(false);
       }
     }
    getUserContacts()
