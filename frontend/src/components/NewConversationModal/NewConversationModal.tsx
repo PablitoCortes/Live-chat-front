@@ -32,7 +32,13 @@ const NewConversationModal = () => {
 			alert(`Error creating conversation ${message}`)
 		})
 	}
-
+	if(!contacts || contacts.length === 0) {
+		return (
+			<div className="absolute top-full mt-2 left-0 z-50 shadow-xl rounded bg-primary p-4 animate-fadeIn">
+				<p className="text-gray-500">No contacts found</p>
+			</div>
+		)
+	}
   return (
     <div className="absolute top-full mt-2 left-0 z-50   shadow-xl rounded bg-primary flex flex-col gap-2 p-2 animate-fadeIn">
       <div className="flex items-center bg-input rounded-lg">

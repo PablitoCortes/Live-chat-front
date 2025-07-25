@@ -1,40 +1,30 @@
 'use client';
 
 import { LoginData} from '@/interfaces/User';
-import { ChangeEvent, useContext, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useUser } from '@/context/UserContext';
 import { useRouter } from 'next/navigation';
-import { useConversation } from '@/context/ConversationContext';
-import { useContacts } from '@/context/ContactContext';
+
 
 const Login = () => {
   const [loginData, setLoginData] = useState<LoginData>({
     email: '',
     password: '',
   });
-  const [loading,setLoading]= useState(false)
    
-  const { login, loadUserProfile } = useUser()
-  const { getConversations } = useConversation()
-  const {getUserContacts} =useContacts()
+  const { user, login, isLoginComplete } = useUser()
   
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true)
     try {
       await login(loginData.email, loginData.password);
-      await loadUserProfile() 
-      await getConversations()
-      await getUserContacts()
+      if(user && !isLoginComplete)
       router.push("/home");
     } catch (err) {
       console.error('Error al iniciar sesión:', err);
       alert('Error al iniciar sesión. Por favor, verifica tus credenciales.');
-    }
-    finally {
-      setLoading(false)
     }
   };
 
@@ -47,7 +37,7 @@ const Login = () => {
     });
   };
 
-  if (loading) {
+  if (isLoginComplete) {
     return (
       <h1>Loading...</h1>
     )

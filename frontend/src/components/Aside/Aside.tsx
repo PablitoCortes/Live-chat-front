@@ -19,16 +19,17 @@ interface AsideProps {
 
 const Aside: React.FC<AsideProps> = ({ variant }) => {
 
-	const { loading: userLoading } = useUser()
-	const { contacts, isLoading: contactsLoading } = useContacts()
+	const {user,isProfileLoaded } = useUser()
+	const { contacts, isContactsLoading} = useContacts()
 	const { conversations, isConversationLoading } = useConversation()
 	const [isContactModal, setIsContactModal] = useState(false)
+
 
 	const handleContactModal = (e: React.MouseEvent) => {
 		e.preventDefault()
 		setIsContactModal(!isContactModal)
 	}
-	if (userLoading || (variant === AsideVariant.Contact && contactsLoading) || (variant === AsideVariant.Chat && isConversationLoading)) {
+	if (isProfileLoaded === false || (variant === AsideVariant.Contact && !isContactsLoading) || (variant === AsideVariant.Chat && !isConversationLoading)) {
 		return <AsideSkeleton />
 	}
 	if (variant === AsideVariant.Contact) {

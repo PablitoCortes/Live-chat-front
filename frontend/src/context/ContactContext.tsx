@@ -2,57 +2,55 @@
 import { createContext, useContext, useState, ReactNode, useCallback,useEffect } from 'react';
 import { User } from '@/interfaces/User';
 import { userService } from '@/services/userService';
+import { useUser } from './UserContext';
 
 interface ContactContextType {
   contacts: User[];
-  isLoading: boolean;
+  isContactsLoading: boolean;
   addContact: (contactEmail: string) => Promise<void>;
   deleteContact: (contactId: string) => Promise<void>;
-  getUserContacts: () => void;
 }
 
 const ContactContext = createContext<ContactContextType | undefined>(undefined);
 
 export const ContactProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [contacts, setContacts] = useState<User[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isContactsLoading, setIsContactsLoading] = useState(false);
+  const { user, isProfileLoaded } = useUser();
 
  
-    const getUserContacts = async () => {  
-      setIsLoading(true);
+  useEffect(() => {
+    setIsContactsLoading(true);
+    const getUserContacts = async () => { 
       try {
+        if(user?._id && isProfileLoaded){
         const res = await userService.getContacts();
         if (!res || !res.data) {
           setContacts([]);
           return;
         }
         setContacts(res.data);
+        }
       } catch (err) {
         console.error('Error obteniendo contactos:', err);
         setContacts([]);
-      } finally {
-        setIsLoading(false);
+        setIsContactsLoading(false);
       }
     }
- 
-    useEffect(() => {
-    getUserContacts()
-  },[])
+   getUserContacts()
+  },[user])
   
   const addContact = useCallback(async (contactEmail: string) => {
-    setIsLoading(true);
     try {
       const res = await userService.addContact(contactEmail);
     } catch (err) {
       console.error('Error agregando contacto:', err);
       throw err;
     } finally {
-      setIsLoading(false);
     }
   }, []);
 
   const deleteContact = useCallback(async (contactId: string) => {
-    setIsLoading(true);
     try {
       const res = await userService.deleteContact(contactId);
       if (res && res.data) {
@@ -64,17 +62,15 @@ export const ContactProvider: React.FC<{ children: ReactNode }> = ({ children })
       console.error('Error eliminando contacto:', err);
       throw err;
     } finally {
-      setIsLoading(false);
     }
   }, []);
 
   return (
     <ContactContext.Provider value={{ 
       contacts, 
-      isLoading, 
+      isContactsLoading, 
       addContact, 
       deleteContact,
-      getUserContacts
     }}>
       {children}
     </ContactContext.Provider>

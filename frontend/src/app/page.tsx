@@ -6,18 +6,15 @@ import { useUser } from "@/context/UserContext";
 
 const Page = () => {
   const router = useRouter();
-  const { user, loading } = useUser();
+  const { user, isProfileLoaded } = useUser();
 
-  console.log(user)
   useEffect(() => {
-    if (loading) return; 
-
-    if (user) {
+    if (user?._id && isProfileLoaded) {
       router.replace("/home");
     } else {
       router.replace("/login"); 
     }
-  }, [user, loading, router]);
+  }, [user, isProfileLoaded, router]);
 
   return null;
 };

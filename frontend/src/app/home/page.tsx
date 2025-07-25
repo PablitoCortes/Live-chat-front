@@ -4,6 +4,7 @@ import { UserIcon, Contact, Settings, MessageCircleMoreIcon} from "lucide-react"
 import Aside from "@/components/Aside/Aside";
 import { AsideVariant } from "@/components/Aside/Aside";
 import Chat from "@/components/Chat/Chat";
+import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute";
 
 
 
