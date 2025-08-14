@@ -78,7 +78,6 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
           if (res || res.data) {
             setConversations(res.data);
             setIsSelectedConversationLoading(false)
-            return;
           } else {
             setConversations([]);
             setIsConversationLoading(false);
