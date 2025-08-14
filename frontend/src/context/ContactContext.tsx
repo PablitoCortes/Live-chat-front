@@ -19,29 +19,26 @@ export const ContactProvider: React.FC<{ children: ReactNode }> = ({ children })
   const { user, isProfileLoaded } = useUser();
 
  
-  useEffect(() => {
-    setIsContactsLoading(true);
-    const getUserContacts = async () => { 
-      try {
-        if(user?._id && isProfileLoaded===true){
-        const res = await userService.getContacts();
-        if (res || res.data) {
-          setContacts(res.data);
-          setIsContactsLoading(false)
-          }
-        else {
-          setContacts([])
-          setIsContactsLoading(false)
-          return
-          }
-        }
-      } catch (err) {
-        console.error('Error obteniendo contactos:', err);
-        setContacts([]);
-      }
+useEffect(() => {
+  if (!user?._id || !isProfileLoaded) return;
+
+  const getUserContacts = async () => {
+    try {
+      setIsContactsLoading(true);
+      const res = await userService.getContacts();
+      setContacts(res?.data || []);
+    } catch (err) {
+      console.error('Error obteniendo contactos:', err);
+      setContacts([]);
+    } finally {
+      setIsContactsLoading(false);
     }
-   getUserContacts()
-  },[user])
+  };
+
+  getUserContacts();
+}, [user?._id, isProfileLoaded]);
+
+
   
   const addContact = useCallback(async (contactEmail: string) => {
     try {

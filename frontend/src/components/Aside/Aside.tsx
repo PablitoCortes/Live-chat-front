@@ -24,7 +24,6 @@ const Aside: React.FC<AsideProps> = ({ variant }) => {
 	const { conversations, isConversationLoading } = useConversation()
 	const [isContactModal, setIsContactModal] = useState(false)
 
-
 	const handleContactModal = (e: React.MouseEvent) => {
 		e.preventDefault()
 		setIsContactModal(!isContactModal)

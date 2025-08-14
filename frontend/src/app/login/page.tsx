@@ -13,7 +13,7 @@ const Login = () => {
     password: '',
   });
    
-  const { user, login, isProfileLoaded } = useUser()
+  const { login} = useUser()
   const [loginLoading, setLoginLoading] = useState(false)
   
   const router = useRouter()
@@ -47,19 +47,23 @@ const Login = () => {
     )
   }
   return (
-    <div className="flex flex-col items-center bg-gray-500">
-      <h1>Login</h1>
-      <form className="flex flex-col bg-amber-600" onSubmit={handleSubmit}>
-        <label htmlFor="email">email or username</label>
+    <div className="flex flex-col items-center h-screen justify-center bg-gray-500">
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        <div className='flex flex-col gap-2'>
+        <label htmlFor="email">E-mail</label>
         <input
           type="text"
-          placeholder="email or username"
+          placeholder="E-mail"
           onChange={handleInputChange}
-          name="email"
-        />
+            name="email"
+            className='border-2 border-gray-300 rounded-md p-2'
+          />
+        </div>
+        <div className='flex flex-col gap-2'>
         <label htmlFor="password">password</label>
-        <input type="password" placeholder="*****" onChange={handleInputChange} name="password" />
-        <button>Login</button>
+        <input type="password" placeholder="*****" onChange={handleInputChange} name="password" className='border-2 border-gray-300 rounded-md p-2' />
+        </div>
+        <button className='bg-blue-500 text-white p-2 rounded-md'>Login</button>
       </form>
     </div>
   );
