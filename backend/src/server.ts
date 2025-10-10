@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { createServer } from "node:http";
 import { app } from ".";
 import { Server } from "socket.io";
-import { CustomSocket, UserPayload } from "./types/types";
+import { CustomSocket } from "./types/types";
 import { getUserConversationsService } from './services/conversationService';
 import { UserConnection } from './interfaces/UserConnection';
 import { createConversationService } from './services/conversationService';

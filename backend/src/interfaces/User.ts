@@ -4,7 +4,6 @@ import { Message } from "./Message";
 
 export interface User {
   _id?: mongoose.Types.ObjectId;
-  id?: string;
   email: string;
   password: string;
   name: string;

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { getUserProfileService } from "../services/userService";
-import { sendResponse, sendError } from "../utils/apiResponse";
+import { sendError } from "../utils/apiResponse";
 
 export interface AuthRequest extends Request {
   user?: {
@@ -43,7 +43,7 @@ export const authUser = async (
 
     const user = await getUserProfileService(decoded.userId);
     if (!user) {
-      sendError(res, 401, "User not found");
+      sendError(res, 404, "User not found");
       return;
     }
 
