@@ -9,8 +9,7 @@ import { connectDB } from "./config/dbConnection";
 export const app = express();
 
 dotevents.config();
-app.use(express.json());
-app.use(cookieParser());
+
 app.use(morgan("dev"));
 
 app.use(
@@ -24,6 +23,8 @@ app.use(
     optionsSuccessStatus: 204
   })
 );
+app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api", router);
 

@@ -5,8 +5,8 @@ import { getContacts, addContact, deleteContact } from "../controllers/contactCo
 const contactRouter = Router();
 
 
-contactRouter.get("/contacts", authUser, getContacts);
-contactRouter.put("/contacts/add", authUser, addContact);
-contactRouter.delete("/contacts/:contactId", authUser, deleteContact);
+contactRouter.get("/", authUser, getContacts);
+contactRouter.put("/add", authUser, addContact);
+contactRouter.delete("/:contactId", authUser, deleteContact);
 
 export default contactRouter;
