@@ -1,14 +1,5 @@
-import axios from 'axios';
+import { apiClient } from "./apiClient";
 
-const NEXT_PUBLIC_MESSAGE_API_URL = process.env.NEXT_PUBLIC_MESSAGE_API_URL;
-
-export interface Message {
-  messageId: string;
-  content: string;
-  senderId: string;
-  conversationId: string;
-  createdAt: Date;
-}
 
 export const messageService = {
   // Crear mensaje
@@ -17,18 +8,18 @@ export const messageService = {
     conversationId: string;
     receiver: string;
   }) => {
-    const response = await axios.post(`${NEXT_PUBLIC_MESSAGE_API_URL}/create`, data);
+    const response = await apiClient.post(`messages/create`, data);
     return response.data;
   },
 
   getConversationMessages: async (conversationId: string, page: number = 1, limit: number = 20) => {
-    const response = await axios.get(`${NEXT_PUBLIC_MESSAGE_API_URL}/${conversationId}?page=${page}&limit=${limit}`);
+    const response = await apiClient.get(`messages/${conversationId}?page=${page}&limit=${limit}`);
     return response.data;
   },
 
   // Eliminar mensaje
   deleteMessage: async (messageId: string) => {
-    const response = await axios.delete(`${NEXT_PUBLIC_MESSAGE_API_URL}/delete/${messageId}`);
+    const response = await apiClient.delete(`messages/delete/${messageId}`);
     return response.data;
   },
 };

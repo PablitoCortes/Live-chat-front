@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { ConversationProvider } from '@/context/ConversationContext';
-import { UserProvider } from '@/context/UserContext';
-import { ContactProvider } from '@/context/ContactContext';
+import { AuthProvider } from '@/context/authContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,13 +14,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es">
       <body className={`${inter.className} h-screen`}>
-        <UserProvider>
-          <ConversationProvider>
-            <ContactProvider>
-              <main className="min-h-screen">{children}</main>
-            </ContactProvider>
-          </ConversationProvider>
-        </UserProvider>
+        <AuthProvider>
+        <main className="min-h-screen">{children}</main>
+        </AuthProvider>
+           
       </body>
     </html>
   );

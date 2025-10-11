@@ -1,8 +1,8 @@
 "use client"
 import { createContext, useContext, useState, ReactNode, useCallback,useEffect } from 'react';
 import { User } from '@/interfaces/User';
-import { userService } from '@/services/userService';
 import { useUser } from './UserContext';
+import { contactService } from '@/services/contactService';
 
 interface ContactContextType {
   contacts: User[];
@@ -16,17 +16,17 @@ const ContactContext = createContext<ContactContextType | undefined>(undefined);
 export const ContactProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [contacts, setContacts] = useState<User[]>([]);
   const [isContactsLoading, setIsContactsLoading] = useState(false);
-  const { user, isProfileLoaded } = useUser();
+  const { user, isProfileLoading } = useUser();
 
  
 useEffect(() => {
-  if (!user?._id || !isProfileLoaded) return;
-
   const getUserContacts = async () => {
     try {
       setIsContactsLoading(true);
-      const res = await userService.getContacts();
-      setContacts(res?.data || []);
+      const res = await contactService.getContacts();
+      if(res.data){
+        setContacts(res.data);
+      }
     } catch (err) {
       console.error('Error obteniendo contactos:', err);
       setContacts([]);
@@ -36,13 +36,13 @@ useEffect(() => {
   };
 
   getUserContacts();
-}, [user?._id, isProfileLoaded]);
+}, [user, isProfileLoading]);
 
 
   
   const addContact = useCallback(async (contactEmail: string) => {
     try {
-      const res = await userService.addContact(contactEmail);
+      await contactService.addContact(contactEmail);
     } catch (err) {
       console.error('Error agregando contacto:', err);
       throw err;
@@ -52,7 +52,7 @@ useEffect(() => {
 
   const deleteContact = useCallback(async (contactId: string) => {
     try {
-      const res = await userService.deleteContact(contactId);
+      const res = await contactService.deleteContact(contactId);
       if (res && res.data) {
         setContacts(prevContacts => 
           prevContacts.filter(contact => contact._id !== contactId)

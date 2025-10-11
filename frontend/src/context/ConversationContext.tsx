@@ -36,7 +36,7 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
   const [isConversationLoading, setIsConversationLoading] = useState(false);
   const [isSelectedConversationLoading, setIsSelectedConversationLoading] = useState(false);
   const [isMessagesLoading, setIsMessagesLoading] = useState(false);
-  const { user, isProfileLoaded } = useUser();
+  const { user, isProfileLoading } = useUser();
 
   const setSelectedConversation = useCallback(async (conversation: Conversation | null) => {
     if (!conversation) {
@@ -73,25 +73,27 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
       const getConversations = async () => {
       setIsConversationLoading(true);
       try {
-        if(user?._id && isProfileLoaded===true){
+        if(isProfileLoading===false && user){
           const res = await conversationService.getUserConversations();
-          if (res || res.data) {
+          if (res.data) {
             setConversations(res.data);
-            setIsSelectedConversationLoading(false)
           } else {
             setConversations([]);
-            setIsConversationLoading(false);
           }
         }
       } catch (err) {
         console.error("Error al cargar conversaciones:", err);
+      }finally{
+        setIsConversationLoading(false)
       } 
     };
   
     getConversations();
-  }, [user, isProfileLoaded]);
+  }, [user, isProfileLoading]);
   
-    
+    useEffect(()=>{
+      console.log("conversationContext", conversations)
+    })
   return (
     <ConversationContext.Provider value={{
       conversations,

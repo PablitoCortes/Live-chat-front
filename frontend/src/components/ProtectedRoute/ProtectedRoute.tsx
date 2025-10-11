@@ -1,3 +1,4 @@
+"use client";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
@@ -7,17 +8,23 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { user, loading } = useUser();
+  const { user, isProfileLoading } = useUser();
   const router = useRouter();
 
-  console.log(user)
   useEffect(() => {
-    if (!user) {
+    if (!isProfileLoading && !user) {
       router.push("/login");
     }
-  }, [user, loading, router]);
+  }, [user, isProfileLoading, router]);
 
-  if (loading) return <div>Cargando sesión...</div>; // spinner opcional
+  if (isProfileLoading) {
+
+    return <div>Cargando...</div>
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return <>{children}</>;
 };
