@@ -57,9 +57,9 @@ const Login = () => {
         <label htmlFor="password">password</label>
         <input type="password" placeholder="*****" onChange={handleInputChange} name="password" className='border-2 border-gray-300 rounded-md p-2' />
         </div>
-        <GoogleLoginButton/>
         <button className='bg-primary text-white p-2 rounded-md'>{loginLoading ? "Cargando..." :"Login"}</button>
       </form>
+        <GoogleLoginButton/>
     </div>
   );
 };

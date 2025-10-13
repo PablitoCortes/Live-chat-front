@@ -12,6 +12,7 @@ const GoogleLoginButton = () => {
   return (
     <div className="w-full">
       <button
+        type="button"
         onClick={handleGoogleLogin}
         className="w-full bg-white border border-gray-300 px-4 py-3 rounded-lg flex items-center justify-center gap-3 text-gray-700 font-medium hover:bg-gray-50 transition-colors duration-200"
       >

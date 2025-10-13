@@ -10,7 +10,7 @@ type AsideProps = {
 
 const Aside: React.FC<AsideProps> = ({ variant }) => {
   return (
-    <aside className="w-[25%] h-full bg-primary border-r border-border">
+    <aside className="w-full h-full bg-primary border-r border-border flex flex-col">
       {variant === "conversation" ? (
         <ConversationsAsideSection />
       ) : (

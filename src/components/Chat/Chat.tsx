@@ -87,7 +87,7 @@ export const Chat = () => {
 
   if (!selectedConversation) {
     return (
-      <main className="w-[70%] flex flex-col bg-secondary h-screen">
+      <main className="w-full flex flex-col bg-secondary h-screen">
         <div className="relative top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-center text-white text-lg font-semibold">
           Selecciona una conversación Para empezar
         </div>
@@ -105,7 +105,7 @@ export const Chat = () => {
   );
 
   return (
-    <main className="w-[70%] flex flex-col bg-secondary h-screen">
+<main className="w-full flex flex-col bg-secondary h-full">
       
       <header className="w-full border-1 h-[8%] bg-primary flex items-center px-4 font-semibold text-lg text-white">
         {otherParticipant?.name}

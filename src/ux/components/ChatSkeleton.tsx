@@ -2,7 +2,7 @@ import Skeleton from "@/components/Skeleton/Skeleton";
 
 const ChatSkeleton = () => {
   return (
-    <main className="w-[70%] flex flex-col bg-secondary h-screen">
+    <main className="full flex flex-col bg-secondary h-screen">
       <header className="w-full border-1 h-[8%] bg-primary flex items-center px-4">
         <Skeleton className="w-1/3 h-5" />
       </header>

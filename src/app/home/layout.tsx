@@ -1,21 +1,18 @@
-import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute";
-import { ContactProvider } from "@/context/ContactContext";
-import { ConversationProvider } from "@/context/ConversationContext";
-import { UserProvider } from "@/context/UserContext";
+import ProtectedRoute from '@/components/ProtectedRoute/ProtectedRoute';
+import { ContactProvider } from '@/context/ContactContext';
+import { ConversationProvider } from '@/context/ConversationContext';
+import { UserProvider } from '@/context/UserContext';
 
 function HomeLayout({ children }: { children: React.ReactNode }) {
-    return (
-        <UserProvider>
+  return (
+    <UserProvider>
+      <ProtectedRoute>
         <ConversationProvider>
-          <ContactProvider>
-            <ProtectedRoute>
-           {children}
-            </ProtectedRoute>
-          </ContactProvider>
+          <ContactProvider>{children}</ContactProvider>
         </ConversationProvider>
-      </UserProvider>
-    );
-  }
+      </ProtectedRoute>
+    </UserProvider>
+  );
+}
 
-
-  export default HomeLayout
+export default HomeLayout;
