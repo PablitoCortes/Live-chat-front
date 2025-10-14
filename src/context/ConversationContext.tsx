@@ -14,13 +14,17 @@ import { messageService } from "@/services/messageService";
 import { useUser } from "./UserContext";
 
 interface ConversationContextType {
-  conversations: Conversation[];
+  userConversations: Conversation[];
   selectedConversation: Conversation | null;
   selectedConversationMessages: Message[];
   setSelectedConversation: (conversation: Conversation | null) => void;
   setSelectedConversationMessages: React.Dispatch<React.SetStateAction<Message[]>>;
-  setConversations: (messages: Conversation[]) => void;
+  setUserConversations: (messages: Conversation[]) => void;
+  createConversation:(contactId:string)=>void;
 
+  isChatOpen: boolean; 
+  openChat: () => void; 
+  closeChat: () => void; 
   isConversationLoading: boolean;
   isSelectedConversationLoading: boolean;
   isMessagesLoading: boolean;
@@ -31,12 +35,14 @@ const ConversationContext = createContext<ConversationContextType | undefined>(u
 export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const [selectedConversation, setSelectedConversationState] = useState<Conversation | null>(null);
-  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [userConversations, setUserConversations] = useState<Conversation[]>([]);
   const [selectedConversationMessages, setSelectedConversationMessages] = useState<Message[]>([]);
   const [isConversationLoading, setIsConversationLoading] = useState(false);
   const [isSelectedConversationLoading, setIsSelectedConversationLoading] = useState(false);
   const [isMessagesLoading, setIsMessagesLoading] = useState(false);
   const { user, isProfileLoading } = useUser();
+
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const setSelectedConversation = useCallback(async (conversation: Conversation | null) => {
     if (!conversation) {
@@ -76,9 +82,9 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
         if(isProfileLoading===false && user){
           const res = await conversationService.getUserConversations();
           if (res.data) {
-            setConversations(res.data);
+            setUserConversations(res.data);
           } else {
-            setConversations([]);
+            setUserConversations([]);
           }
         }
       } catch (err) {
@@ -92,19 +98,33 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
   }, [user, isProfileLoading]);
   
     useEffect(()=>{
-      console.log("conversationContext", conversations)
+      console.log("conversationContext", userConversations)
     })
+
+  const createConversation = async(contactId:string)=>{
+    try{
+      const response = await conversationService.createConversation(contactId)
+      setUserConversations([...userConversations, response])
+      setSelectedConversation(response)
+    }catch{
+
+    }
+  }
   return (
     <ConversationContext.Provider value={{
-      conversations,
+      userConversations,
       selectedConversation,
       selectedConversationMessages,
       setSelectedConversation,
       setSelectedConversationMessages,
-      setConversations,
+      setUserConversations,
+      createConversation,
       isConversationLoading,
       isSelectedConversationLoading,
       isMessagesLoading,
+      isChatOpen,
+      openChat: () => setIsChatOpen(true),
+      closeChat: () => setIsChatOpen(false),
     }}>
       {children}
     </ConversationContext.Provider>

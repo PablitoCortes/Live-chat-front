@@ -3,8 +3,8 @@ import { useConversation } from '@/context/ConversationContext';
 import ChatCard from '../Cards/ChatCard';
 
 const ConversationsAsideSection = () => {
-  const { conversations, isConversationLoading } = useConversation();
-  if (!isConversationLoading && conversations.length === 0) {
+  const { userConversations, isConversationLoading } = useConversation();
+  if (!isConversationLoading && userConversations.length === 0) {
     return (
 
         <div className="flex flex-col items-center justify-center h-full text-2xl text-plain text-center">
@@ -17,7 +17,7 @@ const ConversationsAsideSection = () => {
     <>
       <div className="overflow-y-auto px-4 flex flex-col gap-4">
         <div className="flex flex-col gap-2 p-4">
-          {conversations.map(conv => (
+          {userConversations.map(conv => (
             <ChatCard key={conv._id} conversation={conv} />
           ))}
         </div>

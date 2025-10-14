@@ -1,70 +1,97 @@
-import { useContacts } from "@/context/ContactContext"
-import { Search } from "lucide-react"
-import ContactCard from "../Cards/ContactCard"
-import { useUser } from "@/context/UserContext"
-import { socket } from "@/socket/socket"
-import { useConversation } from "@/context/ConversationContext"
+import { useUser } from '@/context/UserContext';
+import { socket } from '@/socket/socket';
+import { useConversation } from '@/context/ConversationContext';
+import { User } from '@/interfaces/User';
+import { useContacts } from '@/context/ContactContext';
+import { useEffect } from 'react';
+import { Conversation } from '@/interfaces/Conversation';
 
-
-const NewConversationModal = () => {
-
-	const { contacts } = useContacts()
-	const { user } = useUser()
-	const {setSelectedConversation, conversations, setConversations} = useConversation()
-
-
-	const handleNewConversation = async (contactId: string) => {
-		if (contactId === user?._id) {
-			return (
-				alert("cannot create a conversation with yourself")
-			)
-		}
-		socket.emit("new conversation", {
-  		participants: [contactId, user?._id]
-		});
-		socket.on("conversation created", (data) => {
-			const { conversation } = data;
-			setSelectedConversation(conversation)
-			setConversations([...conversations, conversation])
-		})
-		socket.on("newConversationError", (data) => {
-			const {message}= data
-			alert(`Error creating conversation ${message}`)
-		})
-	}
-	if(!contacts || contacts.length === 0) {
-		return (
-			<div className="absolute top-full mt-2 left-0 z-50 shadow-xl rounded bg-primary p-4 animate-fadeIn">
-				<p className="text-gray-500">No contacts found</p>
-			</div>
-		)
-	}
-  return (
-    <div className="absolute top-full mt-2 left-0 z-50   shadow-xl rounded bg-primary flex flex-col gap-2 p-2 animate-fadeIn">
-      <div className="flex items-center bg-input rounded-lg">
-				<div className="pl-3">
-					<Search size={20} className="text-gray-500" />
-				</div>
-				<input
-					type="search"
-					placeholder="find contact"
-					className="w-full p-2 rounded-lg focus:outline-none bg-input"
-					/>
-			</div>
-			<div>
-					{
-					contacts.map((contact) => (
-						<div
-							key={contact._id}
-							onClick={() => contact._id && handleNewConversation(contact._id)}
-						>
-							<ContactCard contact={contact} />
-						</div>
-					))
-				}
-			</div>
-    </div>
-  )
+interface NewConversationModalProps {
+  contact: User;
+  setIsAddContactModalOpen: (value: boolean) => void;
 }
 
-export default NewConversationModal
+const NewConversationModal: React.FC<NewConversationModalProps> = ({
+  contact,
+  setIsAddContactModalOpen,
+}) => {
+  const { user } = useUser();
+  const { setSelectedConversation, userConversations, setUserConversations,openChat } = useConversation();
+  const { addContact } = useContacts();
+
+  const handleNewConversation = async (contactId: string) => {
+    if (contactId === user?._id) {
+      return alert('Cannot create a conversation with yourself');
+    }
+
+    try {
+      if (contact && contact.email) {
+        await addContact(contact.email);
+      }
+
+      socket.emit('new conversation', {
+        participants: [contactId, user?._id],
+      });
+    } catch(err) {
+      alert(err)
+    }
+  };
+
+  useEffect(() => {
+    const handleConversationCreated = (data:Conversation) => {
+      
+      setSelectedConversation(data);
+      setUserConversations([...userConversations, data]);
+      setIsAddContactModalOpen(false);
+			openChat()
+    };
+
+    const handleConversationError = (data: { message: string }) => {
+      if (data.message.includes('already exists') || data.message.includes('duplicate')) {
+        alert('Ya tienes una conversación con este usuario');
+      } else {
+        alert(`Error creating conversation: ${data.message}`);
+      }
+    };
+
+    socket.on('conversation created', handleConversationCreated);
+    socket.on('newConversationError', handleConversationError);
+
+    return () => {
+      socket.off('conversation created', handleConversationCreated);
+      socket.off('newConversationError', handleConversationError);
+    };
+  }, [userConversations, setSelectedConversation, setUserConversations, setIsAddContactModalOpen]);
+
+  return (
+    <div 
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 animate-fadeIn"
+      onClick={() => setIsAddContactModalOpen(false)}
+    >
+      <div 
+        className="bg-primary p-6 rounded-xl shadow-2xl max-w-md w-[90%] flex flex-col gap-4"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h1 className="text-lg font-semibold text-center text-white">
+          {`Do you want to create a conversation with ${contact.name}?`}
+        </h1>
+        <div className="flex justify-center gap-4">
+          <button
+            onClick={() => contact._id && handleNewConversation(contact._id)}
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+          >
+            Confirm
+          </button>
+          <button
+            onClick={() => setIsAddContactModalOpen(false)}
+            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default NewConversationModal;

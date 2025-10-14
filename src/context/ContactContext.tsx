@@ -6,7 +6,9 @@ import { contactService } from '@/services/contactService';
 
 interface ContactContextType {
   contacts: User[];
+  allContacts: User[];
   isContactsLoading: boolean;
+  isAllContactsLoading: boolean;
   addContact: (contactEmail: string) => Promise<void>;
   deleteContact: (contactId: string) => Promise<void>;
 }
@@ -15,10 +17,29 @@ const ContactContext = createContext<ContactContextType | undefined>(undefined);
 
 export const ContactProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [contacts, setContacts] = useState<User[]>([]);
+  const [allContacts, setAllContacts]= useState<User[]>([]);
+  const [isAllContactsLoading, setIsAllContactsLoading] = useState(false);
   const [isContactsLoading, setIsContactsLoading] = useState(false);
   const { user, isProfileLoading } = useUser();
 
- 
+useEffect(()=>{
+  const getAllContacts = async()=>{
+    try{
+      setIsAllContactsLoading(true)
+      const res = await contactService.getAllContacts()
+      if(res.data){
+        setAllContacts(res.data)
+      }
+      else{
+        setAllContacts([])
+      }
+    }catch(err){
+      console.error(err)
+    }
+  }
+  getAllContacts()
+},[])
+
 useEffect(() => {
   const getUserContacts = async () => {
     try {
@@ -71,6 +92,8 @@ useEffect(() => {
       isContactsLoading, 
       addContact, 
       deleteContact,
+      isAllContactsLoading,
+      allContacts
     }}>
       {children}
     </ContactContext.Provider>

@@ -1,4 +1,4 @@
-import { Laugh, Plus, Send } from "lucide-react";
+import { ArrowLeft, Laugh, Plus, Send } from "lucide-react";
 import { useConversation } from "@/context/ConversationContext";
 import { ChangeEvent, useState, KeyboardEvent, MouseEvent, useEffect } from "react";
 import { Message } from "@/interfaces/Message";
@@ -18,6 +18,7 @@ export const Chat = () => {
   } = useConversation();
 
   const { user } = useUser();
+  const {closeChat}= useConversation()
   const [message, setMessage] = useState<Message>({
     sender: "",
     receiver: "",
@@ -107,7 +108,10 @@ export const Chat = () => {
   return (
 <main className="w-full flex flex-col bg-secondary h-full">
       
-      <header className="w-full border-1 h-[8%] bg-primary flex items-center px-4 font-semibold text-lg text-white">
+      <header className="w-full border-1 h-[8%] bg-primary flex items-center px-4 font-semibold text-lg gap-2 text-white">
+        <button onClick={closeChat}>
+        <ArrowLeft/>
+        </button>
         {otherParticipant?.name}
       </header>
       
@@ -120,7 +124,7 @@ export const Chat = () => {
         })}
       </section>
 
-      <div className="w-full h-[6%] flex justify-between items-center px-4 py-2  mb-2 gap-4">
+      <div className="w-full sticky bottom-0 h-[6%] flex justify-between items-center px-4 py-2  mb-2 gap-4">
         <button className="w-[5%] flex justify-center">
           <Plus />
         </button>
