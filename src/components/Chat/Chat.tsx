@@ -78,7 +78,7 @@ export const Chat = () => {
     return () => {
       socket.off("message created", handleNewMessage);
     };
-  }, [selectedConversation?._id]);
+  }, [selectedConversation?._id,setSelectedConversationMessages]);
   
 
   useEffect(() => {

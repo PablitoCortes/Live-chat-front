@@ -14,12 +14,8 @@ interface ModalProps {
 
 const Modal: React.FC<ModalProps> = ({
     isOpen,
-    onClose,
-    onConfirm,
     title,
     message,
-    confirmText = "Confirmar",
-    cancelText = "Cancelar"
 }) => {
     if (!isOpen) return null;
 
