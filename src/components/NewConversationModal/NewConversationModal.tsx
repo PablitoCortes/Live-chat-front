@@ -61,7 +61,7 @@ const NewConversationModal: React.FC<NewConversationModalProps> = ({
       socket.off('conversation created', handleConversationCreated);
       socket.off('newConversationError', handleConversationError);
     };
-  }, [userConversations, setSelectedConversation, setUserConversations, setIsAddContactModalOpen]);
+  }, [userConversations, setSelectedConversation, setUserConversations, setIsAddContactModalOpen,openChat]);
 
   return (
     <div 
