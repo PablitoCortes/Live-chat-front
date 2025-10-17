@@ -123,9 +123,9 @@ export const Chat = () => {
   );
 
   return (
-    <main className="w-full flex flex-col bg-secondary h-full min-h-0">
+    <main className="w-full flex flex-col bg-secondary h-full min-h-0 relative">
       {/* HEADER */}
-      <header className="w-full h-14 bg-primary flex items-center px-4 font-semibold text-lg gap-2 text-white flex-shrink-0">
+      <header className="w-full h-14 bg-primary flex items-center px-4 font-semibold text-lg gap-2 text-white flex-shrink-0 z-20">
         <button onClick={closeChat}>
           <ArrowLeft />
         </button>
@@ -135,7 +135,7 @@ export const Chat = () => {
       {/* MENSAJES */}
       <section
         id="messages"
-        className="flex-1 px-5 bg-[url('/images/darkbackground.svg')] bg-cover bg-center pt-8 flex flex-col-reverse gap-2 overflow-y-auto overflow-x-hidden min-h-0"
+        className="flex-1 px-5 bg-[url('/images/darkbackground.svg')] bg-cover bg-center pt-8 flex flex-col-reverse gap-2 overflow-y-auto overflow-x-hidden min-h-0 pb-20"
       >
         {selectedConversationMessages.map((message) => {
           if (message.sender === user?._id) {
@@ -169,8 +169,8 @@ export const Chat = () => {
         })}
       </section>
   
-      {/* INPUT (barra inferior) */}
-      <footer className="w-full flex justify-between items-center px-4 py-3 bg-secondary gap-4 border-t border-border flex-shrink-0 pb-safe">
+      {/* INPUT (barra inferior) - FIXED en móviles */}
+      <footer className="w-full flex justify-between items-center px-4 py-3 bg-secondary gap-4 border-t border-border flex-shrink-0 pb-safe fixed bottom-0 left-0 right-0 z-30 md:relative md:z-auto">
         <button className="w-8 h-8 flex justify-center items-center">
           <Plus size={20} />
         </button>

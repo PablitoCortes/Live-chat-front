@@ -64,7 +64,7 @@ const Home = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row w-screen h-screen text-white bg-primary relative">
+    <div className="flex flex-col md:flex-row w-screen h-[100dvh] md:h-screen text-white bg-primary relative">
       <button
         className={`${isChatOpen ? 'hidden' : 'flex'} md:hidden p-4`}
         onClick={() => setIsMenuOpen(true)}
@@ -243,7 +243,7 @@ const Home = () => {
       <div
         className={`${
           isChatOpen ? 'flex' : 'hidden'
-        } md:flex flex-col flex-1 h-full`}
+        } md:flex flex-col flex-1 h-full min-h-0`}
       >
         <Chat />
       </div>

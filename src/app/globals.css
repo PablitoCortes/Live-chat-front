@@ -50,5 +50,18 @@ input[type="text"], input[type="email"], input[type="password"], textarea {
     position: fixed;
     width: 100%;
     height: 100%;
+    height: 100dvh;
+  }
+  
+  /* Asegurar que el input siempre sea visible */
+  input[type="text"] {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+  
+  /* Evitar que el footer se oculte */
+  footer {
+    position: relative;
+    z-index: 10;
   }
 }
