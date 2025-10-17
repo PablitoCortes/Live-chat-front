@@ -31,3 +31,24 @@ main {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch; 
 }
+
+/* Mejoras para móviles */
+@supports (padding: max(0px)) {
+  .pb-safe {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* Evitar zoom en inputs en iOS */
+input[type="text"], input[type="email"], input[type="password"], textarea {
+  font-size: 16px;
+}
+
+/* Mejorar el comportamiento del teclado virtual */
+@media screen and (max-width: 768px) {
+  body {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+  }
+}

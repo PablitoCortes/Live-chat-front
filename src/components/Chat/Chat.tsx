@@ -46,18 +46,11 @@ export const Chat = () => {
       }
     };
   
-    // cada vez que cambia el viewport (por teclado)
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener("resize", adjustScroll);
-    }
-  
-    // y cuando llega un nuevo mensaje
+    // Scroll inicial
     adjustScroll();
   
     return () => {
-      if (window.visualViewport) {
-        window.visualViewport.removeEventListener("resize", adjustScroll);
-      }
+      // Cleanup si es necesario
     };
   }, [selectedConversationMessages]);
 
@@ -130,9 +123,9 @@ export const Chat = () => {
   );
 
   return (
-    <main className="w-full flex flex-col bg-secondary h-[100dvh] overflow-hidden">
+    <main className="w-full flex flex-col bg-secondary h-full min-h-0">
       {/* HEADER */}
-      <header className="w-full h-[8%] min-h-[50px] bg-primary flex items-center px-4 font-semibold text-lg gap-2 text-white shrink-0">
+      <header className="w-full h-14 bg-primary flex items-center px-4 font-semibold text-lg gap-2 text-white flex-shrink-0">
         <button onClick={closeChat}>
           <ArrowLeft />
         </button>
@@ -142,7 +135,7 @@ export const Chat = () => {
       {/* MENSAJES */}
       <section
         id="messages"
-        className="flex-1 px-5 bg-[url('/images/darkbackground.svg')] bg-cover bg-center pt-8 flex flex-col-reverse gap-2 overflow-y-auto overflow-x-hidden"
+        className="flex-1 px-5 bg-[url('/images/darkbackground.svg')] bg-cover bg-center pt-8 flex flex-col-reverse gap-2 overflow-y-auto overflow-x-hidden min-h-0"
       >
         {selectedConversationMessages.map((message) => {
           if (message.sender === user?._id) {
@@ -177,12 +170,12 @@ export const Chat = () => {
       </section>
   
       {/* INPUT (barra inferior) */}
-      <footer className="w-full flex justify-between items-center px-4 py-2 bg-secondary gap-4 border-t border-border shrink-0 safe-area-inset-bottom">
-        <button className="w-[5%] flex justify-center">
-          <Plus />
+      <footer className="w-full flex justify-between items-center px-4 py-3 bg-secondary gap-4 border-t border-border flex-shrink-0 pb-safe">
+        <button className="w-8 h-8 flex justify-center items-center">
+          <Plus size={20} />
         </button>
-        <button className="w-[5%] flex justify-center">
-          <Laugh />
+        <button className="w-8 h-8 flex justify-center items-center">
+          <Laugh size={20} />
         </button>
         <input
           type="text"
@@ -190,16 +183,16 @@ export const Chat = () => {
           value={message.content}
           placeholder="Start typing"
           autoComplete="off"
-          className="flex-1 bg-input rounded-3xl px-4 py-2 focus:outline-none focus:ring-0"
+          className="flex-1 bg-input rounded-3xl px-4 py-2 focus:outline-none focus:ring-0 text-white placeholder-gray-400"
           onChange={handleInputChange}
           onKeyDown={(e) => e.key === "Enter" && submitMessage(e)}
         />
         <button
           type="submit"
           onClick={submitMessage}
-          className="w-[5%] flex justify-center items-center bg-message rounded-full hover:bg-message/80 transition-colors"
+          className="w-10 h-10 flex justify-center items-center bg-message rounded-full hover:bg-message/80 transition-colors"
         >
-          <Send size={18} />
+          <Send size={18} className="text-white" />
         </button>
       </footer>
     </main>
