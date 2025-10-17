@@ -17,7 +17,7 @@ const GoogleLoginButton = () => {
         className="w-full bg-white border border-gray-300 px-4 py-3 rounded-lg flex items-center justify-center gap-3 text-gray-700 font-medium hover:bg-gray-50 transition-colors duration-200"
       >
         <span className="flex gap-4">
-          Iniciar sesión con Google
+          Login with google
           <Image
           src={"https://developers.google.com/identity/images/g-logo.png"}
           width={25}

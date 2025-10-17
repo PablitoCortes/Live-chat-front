@@ -15,7 +15,7 @@ const ConversationsAsideSection = () => {
 
   return (
     <>
-      <div className="overflow-y-auto px-4 flex flex-col gap-4">
+      <div className="flex-1 overflow-y-auto px-4 py-2">
         <div className="flex flex-col gap-2 p-4">
           {userConversations.map(conv => (
             <ChatCard key={conv._id} conversation={conv} />

@@ -13,11 +13,26 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <body className={`${inter.className} h-screen`}>
+      <head>
+        {/* 👇 Esto ayuda a manejar el teclado y viewport en móviles */}
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"
+        />
+      </head>
+      <body
+        className={`${inter.className} h-screen`}
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          backgroundColor: 'primary', // o el color base que uses
+        }}
+      >
         <AuthProvider>
-        <main className="min-h-screen">{children}</main>
+          <main className="min-h-screen">{children}</main>
         </AuthProvider>
-           
       </body>
     </html>
   );

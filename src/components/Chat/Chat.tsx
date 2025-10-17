@@ -1,41 +1,67 @@
-import { ArrowLeft, Laugh, Plus, Send } from "lucide-react";
-import { useConversation } from "@/context/ConversationContext";
-import { ChangeEvent, useState, KeyboardEvent, MouseEvent, useEffect } from "react";
-import { Message } from "@/interfaces/Message";
-import { useUser } from "@/context/UserContext";
-import ChatSkeleton from "@/ux/components/ChatSkeleton";
-import MessageBubble from "../Message/Message";
-import { socket } from "@/socket/socket";
+import { ArrowLeft, Laugh, Plus, Send } from 'lucide-react';
+import { useConversation } from '@/context/ConversationContext';
+import { ChangeEvent, useState, KeyboardEvent, MouseEvent, useEffect } from 'react';
+import { Message } from '@/interfaces/Message';
+import { useUser } from '@/context/UserContext';
+import ChatSkeleton from '@/ux/components/ChatSkeleton';
+import MessageBubble from '../Message/Message';
+import { socket } from '@/socket/socket';
 
 export const Chat = () => {
-
-  const { 
-    selectedConversation, 
+  const {
+    selectedConversation,
     selectedConversationMessages,
     isSelectedConversationLoading,
     isMessagesLoading,
-    setSelectedConversationMessages
+    setSelectedConversationMessages,
   } = useConversation();
 
   const { user } = useUser();
-  const {closeChat}= useConversation()
+  const { closeChat } = useConversation();
   const [message, setMessage] = useState<Message>({
-    sender: "",
-    receiver: "",
-    content: "",
+    sender: '',
+    receiver: '',
+    content: '',
     timestamp: new Date(),
-    conversationId: "",
+    conversationId: '',
   });
-
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setMessage((prev) => ({
+    setMessage(prev => ({
       ...prev,
       [name]: value,
     }));
   };
 
+  useEffect(() => {
+    const messagesContainer = document.getElementById("messages");
+  
+    const adjustScroll = () => {
+      if (messagesContainer) {
+        messagesContainer.scrollTo({
+          top: messagesContainer.scrollHeight,
+          behavior: "smooth",
+        });
+      }
+    };
+  
+    // cada vez que cambia el viewport (por teclado)
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", adjustScroll);
+    }
+  
+    // y cuando llega un nuevo mensaje
+    adjustScroll();
+  
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", adjustScroll);
+      }
+    };
+  }, [selectedConversationMessages]);
+
+  
   const submitMessage = async (
     e: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLInputElement>
   ) => {
@@ -45,7 +71,7 @@ export const Chat = () => {
       !selectedConversation ||
       !user?._id ||
       !selectedConversation._id ||
-      message.content.trim() === ""
+      message.content.trim() === ''
     ) {
       return;
     }
@@ -61,30 +87,28 @@ export const Chat = () => {
       timestamp: new Date(),
       conversationId: selectedConversation._id,
     };
-    socket.emit("new message", newMessage);
-    setMessage((prev) => ({
+    socket.emit('new message', newMessage);
+    setMessage(prev => ({
       ...prev,
-      content: "",
+      content: '',
     }));
   };
 
   useEffect(() => {
     const handleNewMessage = (newMessage: Message) => {
       if (newMessage.conversationId === selectedConversation?._id) {
-        setSelectedConversationMessages(prevMessages => [ newMessage, ...prevMessages ]);
+        setSelectedConversationMessages(prevMessages => [newMessage, ...prevMessages]);
       }
     };
-    socket.on("message created", handleNewMessage);
+    socket.on('message created', handleNewMessage);
     return () => {
-      socket.off("message created", handleNewMessage);
+      socket.off('message created', handleNewMessage);
     };
-  }, [selectedConversation?._id,setSelectedConversationMessages]);
-  
+  }, [selectedConversation?._id, setSelectedConversationMessages]);
 
   useEffect(() => {
-    console.log(selectedConversationMessages)
+    console.log(selectedConversationMessages);
   }, [selectedConversationMessages]);
-    
 
   if (!selectedConversation) {
     return (
@@ -106,25 +130,54 @@ export const Chat = () => {
   );
 
   return (
-<main className="w-full flex flex-col bg-secondary h-full">
-      
-      <header className="w-full border-1 h-[8%] bg-primary flex items-center px-4 font-semibold text-lg gap-2 text-white">
+    <main className="w-full flex flex-col bg-secondary h-[100dvh] overflow-hidden">
+      {/* HEADER */}
+      <header className="w-full h-[8%] min-h-[50px] bg-primary flex items-center px-4 font-semibold text-lg gap-2 text-white shrink-0">
         <button onClick={closeChat}>
-        <ArrowLeft/>
+          <ArrowLeft />
         </button>
         {otherParticipant?.name}
       </header>
-      
-      <section className="w-full h-[86%] px-5 bg-[url('/images/darkbackground.svg')] bg-cover bg-center pt-8 flex flex-col-reverse gap-2 overflow-y-auto overflow-x-hidden">
+  
+      {/* MENSAJES */}
+      <section
+        id="messages"
+        className="flex-1 px-5 bg-[url('/images/darkbackground.svg')] bg-cover bg-center pt-8 flex flex-col-reverse gap-2 overflow-y-auto overflow-x-hidden"
+      >
         {selectedConversationMessages.map((message) => {
           if (message.sender === user?._id) {
-            return <MessageBubble key={message._id}  variant="sender"> {message.content} </MessageBubble>
+            return (
+              <MessageBubble key={message._id} variant="sender">
+                <div className="flex gap-6 justify-center items-center">
+                  <span>{message.content}</span>
+                  <small className="self-end mt-1 text-[10px] text-dark">
+                    {new Date(message.timestamp).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </small>
+                </div>
+              </MessageBubble>
+            );
           }
-          return <MessageBubble key={message._id} variant="receiver" > {message.content} </MessageBubble>
+          return (
+            <MessageBubble key={message._id} variant="receiver">
+              <div className="flex gap-6 justify-center items-center">
+                <span>{message.content}</span>
+                <small className="self-end mt-1 text-[10px] text-dark">
+                  {new Date(message.timestamp).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </small>
+              </div>
+            </MessageBubble>
+          );
         })}
       </section>
-
-      <div className="w-full sticky bottom-0 h-[6%] flex justify-between items-center px-4 py-2  mb-2 gap-4">
+  
+      {/* INPUT (barra inferior) */}
+      <footer className="w-full flex justify-between items-center px-4 py-2 bg-secondary gap-4 border-t border-border shrink-0 safe-area-inset-bottom">
         <button className="w-[5%] flex justify-center">
           <Plus />
         </button>
@@ -137,22 +190,21 @@ export const Chat = () => {
           value={message.content}
           placeholder="Start typing"
           autoComplete="off"
-          className="w-[80%] bg-input rounded-3xl px-4 py-2 focus:outline-none focus:ring-0 flex justify-center"
+          className="flex-1 bg-input rounded-3xl px-4 py-2 focus:outline-none focus:ring-0"
           onChange={handleInputChange}
           onKeyDown={(e) => e.key === "Enter" && submitMessage(e)}
         />
-        <div className="w-[5%] flex justify-center items-center">
-          <button
-            type="submit"
-            onClick={submitMessage}
-            className="w-10 h-10 rounded-full bg-message flex items-center justify-center hover:bg-message/80 transition-colors"
-          >
-            <Send size={18} className="text-white -ml-0.5" />
-          </button>
-        </div>
-      </div>
+        <button
+          type="submit"
+          onClick={submitMessage}
+          className="w-[5%] flex justify-center items-center bg-message rounded-full hover:bg-message/80 transition-colors"
+        >
+          <Send size={18} />
+        </button>
+      </footer>
     </main>
   );
+  
 };
 
 export default Chat;

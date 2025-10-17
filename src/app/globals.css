@@ -17,3 +17,17 @@
     animation: fadeIn 0.2s ease-in-out;
   }
   
+html,
+body {
+  height: 100%;
+  overscroll-behavior: contain; 
+  overflow: hidden; 
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; 
+}
