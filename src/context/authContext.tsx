@@ -39,7 +39,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = async () => {
     try {
       await authService.logout();
-      router.replace("/login")
+      router.replace("/auth/login")
     } catch(error) {
       throw error;
     }

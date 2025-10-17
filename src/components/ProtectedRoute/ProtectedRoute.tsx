@@ -13,7 +13,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
   useEffect(() => {
     if (!isProfileLoading && !user) {
-      router.push("/login");
+      router.push("/auth/login");
     }
   }, [user, isProfileLoading, router]);
 
