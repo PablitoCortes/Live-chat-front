@@ -20,6 +20,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(()=>{
     const loadUserProfile = async () => {
       try {
+        // Pequeño delay para asegurar que las cookies estén disponibles
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
         const res = await userService.getProfile();
         if (res?.data) {
           setUser(res.data);
@@ -28,7 +31,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setUser(null)
         }
       }catch (err){
-        throw err
+        console.log("Error loading user profile:", err);
+        setUser(null);
       }
       finally {
         setIsProfileLoading(false);

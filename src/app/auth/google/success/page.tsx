@@ -8,7 +8,7 @@ export default function GoogleSuccess() {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.replace("/home");
-    }, 1000);
+    }, 2000); // Aumentar el tiempo para que la cookie se establezca
 
     return () => clearTimeout(timer);
   }, [router]);
