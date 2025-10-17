@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://live-chat-back-qjac.onrender.com/:path*", // tu backend
+        destination: "https://live-chat-back-qjac.onrender.com/api/:path*", // tu backend
       },
     ];
   },
