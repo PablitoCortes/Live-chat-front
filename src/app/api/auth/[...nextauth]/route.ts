@@ -12,21 +12,29 @@ const handler = NextAuth({
   pages: {
     signIn: "/login",
   },
-  session:{
+  session: {
     strategy: "jwt",
+  },
+  cookies: {
+    sessionToken: {
+      name: `__Secure-next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "none", // necesario para cross-site
+        path: "/",
+        secure: process.env.NODE_ENV === "production", // solo HTTPS
+      },
+    },
   },
   debug: true,
   callbacks: {
-      async signIn() {
-    // en lugar de fetch directo, redirige a /api/auth/exchange (o llama y luego redirect)
-    return true; // dejamos que NextAuth complete el flujo
-  },
-  async redirect({ baseUrl }) {
-    // después del callback, redirigir a la ruta de intercambio
-    return `${baseUrl}/api/auth/exchange`;
-  }
+    async signIn() {
+      return true;
+    },
+    async redirect({ baseUrl }) {
+      return `${baseUrl}/api/auth/exchange`;
+    },
   },
 });
-
 
 export { handler as GET, handler as POST };
