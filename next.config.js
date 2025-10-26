@@ -1,4 +1,10 @@
+import path from "path";
+import { fileURLToPath } from "url";
+
+
 const isDev = process.env.NODE_ENV !== "production";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -39,6 +45,11 @@ const nextConfig = {
       "lh3.googleusercontent.com",
     ],
   },
+    webpack(config) {
+    config.resolve.alias['@'] = path.resolve(__dirname, 'src');
+    return config;
+  },
+
 };
 
-module.exports = nextConfig;
+export default nextConfig;
