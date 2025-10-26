@@ -17,7 +17,6 @@ export interface User {
 export interface RegisterData extends User {
   email: string;
   name: string;
-  username: string;
   password: string;
 }
 
