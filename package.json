@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).",
   "main": "next.config.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "next dev ",
+    "build": "next build",
+    "start": "next start"
   },
   "repository": {
     "type": "git",
@@ -18,30 +22,31 @@
   },
   "homepage": "https://github.com/PablitoCortes/Live-chat#readme",
   "dependencies": {
-    "@tailwindcss/postcss": "^4.1.16",
-    "autoprefixer": "^10.4.21",
     "axios": "^1.12.2",
     "clsx": "^2.1.1",
     "dotenv": "^17.2.3",
     "lucide-react": "^0.548.0",
     "next": "^15.5.6",
     "next-auth": "^4.24.11",
-    "postcss": "^8.5.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "socket.io-client": "^4.8.1",
-    "tailwindcss": "^4.1.16"
+    "tailwind-scrollbar": "^4.0.2"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.16",
     "@types/node": "^24.9.1",
     "@types/react": "^19.2.2",
+    "autoprefixer": "^10.4.21",
     "eslint": "^9.38.0",
     "eslint-config-next": "^16.0.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
+    "postcss": "^8.5.6",
     "prettier": "^3.6.2",
+    "tailwindcss": "^3.4.13",
     "typescript": "^5.9.3"
   }
 }

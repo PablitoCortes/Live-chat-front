@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body
-        className={`${inter.className} h-screen`}
+        className={`${inter.className} h-screen bg-primary`}
         style={{
           minHeight: '100vh',
           display: 'flex',
