@@ -1,11 +1,12 @@
 import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
+import Auth0Provider from "next-auth/providers/auth0";
 
 const handler = NextAuth({
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    Auth0Provider({
+      clientId: process.env.AUTH0_CLIENT_ID!,
+      clientSecret: process.env.AUTH0_CLIENT_SECRET!,
+      issuer: process.env.AUTH0_ISSUER_BASE_URL!,
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
@@ -15,34 +16,9 @@ const handler = NextAuth({
   session: {
     strategy: "jwt",
   },
-  cookies: {
-    sessionToken: {
-      name: `__Secure-next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: "none", // necesario para cross-site
-        path: "/",
-        secure: process.env.NODE_ENV === "production", // solo HTTPS
-      },
-    },
-  },
-  debug: true,
   callbacks: {
-    async signIn({ user, account, profile }) {
-      // Log para debugging
-      console.log("🔐 SignIn callback:", { 
-        user: user?.email, 
-        account: account?.provider,
-        profile: profile?.email 
-      });
-      return true;
-    },
-    async redirect({ url, baseUrl }) {
-      // Si la URL es relativa, usar baseUrl
-      if (url.startsWith("/")) return `${baseUrl}${url}`;
-      // Si la URL es del mismo dominio, permitirla
-      else if (new URL(url).origin === baseUrl) return url;
-      // Por defecto, ir al exchange
+    async redirect({ baseUrl }) {
+      // después del login, redirige al intercambio con tu backend
       return `${baseUrl}/api/auth/exchange`;
     },
   },
