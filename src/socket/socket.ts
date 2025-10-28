@@ -1,9 +1,7 @@
 import { io } from "socket.io-client";
 
-const socketUrl =
-  process.env.NODE_ENV === "production"
-    ? "https://live-chat-back-qjac.onrender.com"
-    : "http://localhost:5500";
+const socketUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
 
 export const socket = io(socketUrl, {
   withCredentials: true,
