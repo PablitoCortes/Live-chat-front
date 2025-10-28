@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import {signIn} from 'next-auth/react';
 
 const buttonProps = {
   register: {
@@ -17,8 +16,10 @@ type GoogleLoginButtonProps = {
 
 const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ variant = "login" }) => {
 
-  const handleGoogleLogin = async () => {
-    await signIn("google", { callbackUrl: "/home" });
+  const handleGoogleLogin = () => {
+    const returnTo = "/api/auth/exchange";
+    const url = `/api/auth/login?returnTo=${encodeURIComponent(returnTo)}&connection=google-oauth2`;
+    window.location.href = url;
   };
 
   const text = buttonProps[variant].text;

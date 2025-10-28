@@ -19,6 +19,7 @@ export const authService ={
   },
 
   googleLogin: async () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_AUTH_URL}/google`;
+    const returnTo = "/api/auth/exchange";
+    window.location.href = `/api/auth/login?returnTo=${encodeURIComponent(returnTo)}&connection=google-oauth2`;
   },
 }

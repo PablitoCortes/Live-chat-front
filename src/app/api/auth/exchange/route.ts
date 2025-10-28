@@ -1,30 +1,23 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getToken } from "next-auth/jwt";
+import { getSession } from "@auth0/nextjs-auth0/edge";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL!;
-const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET!;
-
-interface Auth0Token {
-  name?: string;
-  email?: string;
-  picture?: string;
-  sub?: string;
-}
 
 export async function GET(req: NextRequest) {
   try {
-    const token = (await getToken({ req, secret: NEXTAUTH_SECRET })) as Auth0Token | null;
+    const session = await getSession(req, NextResponse.next());
+    const user = session?.user;
 
-    if (!token) {
-      console.error("❌ No next-auth token found");
-      return NextResponse.redirect(new URL("/login", req.url));
+    if (!user) {
+      console.error("❌ No Auth0 session found");
+      return NextResponse.redirect(new URL("/auth/login", req.url));
     }
 
     const userPayload = {
-      name: token.name || "",
-      email: token.email || "",
-      avatarUrl: token.picture || "",
+      name: user.name || "",
+      email: user.email || "",
+      avatarUrl: (user as any).picture || "",
     };
 
     const backendRes = await fetch(`${BACKEND_URL}/api/auth/google-login`, {
