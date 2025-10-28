@@ -17,7 +17,7 @@ type GoogleLoginButtonProps = {
 const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ variant = "login" }) => {
 
   const handleGoogleLogin = () => {
-    const returnTo = "/api/auth/exchange";
+    const returnTo = "/home";
     const url = `/api/auth/login?returnTo=${encodeURIComponent(returnTo)}&connection=google-oauth2`;
     window.location.href = url;
   };
