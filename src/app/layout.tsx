@@ -1,39 +1,29 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import { AuthProvider } from '@/context/authContext';
+import './globals.css'
+import type { Metadata } from 'next'
 
-const inter = Inter({ subsets: ['latin'] });
+import { outfit } from './fonts.ts'
+import { AuthProvider } from '@/context/authContext'
+
 
 export const metadata: Metadata = {
-  title: 'Live Chat App',
-  description: 'Aplicación de chat en tiempo real',
-};
+  title: 'Live Chat',
+  description: 'Live Chat App',
+}
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="es">
-      <head>
-        {/* 👇 Esto ayuda a manejar el teclado y viewport en móviles */}
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"
-        />
-      </head>
-      <body
-        className={`${inter.className} h-screen bg-primary`}
-        style={{
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-          backgroundColor: 'primary', // o el color base que uses
-        }}
-      >
+    <html lang="en" className={outfit.variable}>
+      <body className={`font-outfit bg-dark-900 text-gray-100`}>
         <AuthProvider>
-          <main className="min-h-screen">{children}</main>
+          <main className="min-h-screen flex flex-col">
+            {children}
+          </main>
         </AuthProvider>
       </body>
     </html>
-  );
+  )
 }

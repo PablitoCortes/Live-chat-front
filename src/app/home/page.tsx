@@ -23,7 +23,7 @@ import ChatCard from '@/components/Cards/ChatCard';
 const Home = () => {
   const { user } = useUser();
   const { logout } = useAuth();
-  const { isChatOpen, userConversations } = useConversation();
+  const { isChatOpen, userConversations, messageCounters } = useConversation();
   const { allContacts } = useContacts();
   const router = useRouter();
 

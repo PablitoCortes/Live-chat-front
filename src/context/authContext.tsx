@@ -7,7 +7,6 @@ import axios from 'axios';
 interface AuthContextType {
   logout: () => void;
   login: (email: string, password: string) => void;
-  googleLogin: () => void;
   register: (email: string, name: string, password: string) => void;
 }
 
@@ -24,9 +23,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const googleLogin = () => {
-    authService.googleLogin();
-  };
 
   const register = async (email: string, name: string, password: string) => {
     try {
@@ -51,7 +47,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ login, googleLogin, register, logout }}>
+    <AuthContext.Provider value={{ login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

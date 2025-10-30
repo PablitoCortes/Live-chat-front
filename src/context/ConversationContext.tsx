@@ -6,17 +6,21 @@ import {
   useCallback,
   ReactNode,
   useEffect,
+  useRef,
 } from "react";
 import { Conversation } from "@/interfaces/Conversation";
 import { conversationService } from "@/services/conversationService";
 import { Message } from "@/interfaces/Message";
 import { messageService } from "@/services/messageService";
 import { useUser } from "./UserContext";
+import { socket } from "@/socket/socket";
+import {DateFormater} from "@/lib/utils/DateFormater"
 
 interface ConversationContextType {
   userConversations: Conversation[];
   selectedConversation: Conversation | null;
   selectedConversationMessages: Message[];
+  messageCounters: {conversationId: string, counter: number, message:string, timestamp: string}[];
   setSelectedConversation: (conversation: Conversation | null) => void;
   setSelectedConversationMessages: React.Dispatch<React.SetStateAction<Message[]>>;
   setUserConversations: (messages: Conversation[]) => void;
@@ -41,10 +45,13 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
   const [isSelectedConversationLoading, setIsSelectedConversationLoading] = useState(false);
   const [isMessagesLoading, setIsMessagesLoading] = useState(false);
   const { user, isProfileLoading } = useUser();
-
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [messageCounters, setMessageCounters] = useState<{conversationId: string, counter: number, message:string, timestamp: string}[]>([]);
+
+
 
   const setSelectedConversation = useCallback(async (conversation: Conversation | null) => {
+
     if (!conversation) {
       setSelectedConversationState(null);
       setSelectedConversationMessages([]);
@@ -96,10 +103,60 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
   
     getConversations();
   }, [user, isProfileLoading]);
-  
-    useEffect(()=>{
-      console.log("conversationContext", userConversations)
-    })
+
+const selectedConversationRef = useRef(selectedConversation);
+
+useEffect(() => {
+  selectedConversationRef.current = selectedConversation;
+}, [selectedConversation]);
+
+useEffect(() => {
+  if (selectedConversation?._id) {
+    setMessageCounters(prev => 
+      prev.map(counter => 
+        counter.conversationId === selectedConversation._id 
+          ? { ...counter, counter: 0 } 
+          : counter
+      )
+    );
+  }
+}, [selectedConversation]);
+
+useEffect(() => {
+  const handler = (newMessage: Message) => {
+    if(newMessage.sender=== user?._id){
+      return
+    }
+    setMessageCounters(prev => {
+      const exists = prev.find(c => c.conversationId === newMessage.conversationId);
+      const ts = DateFormater(newMessage.timestamp)
+      if (exists) {
+        return prev.map(c =>
+          c.conversationId === newMessage.conversationId ? { ...c, counter: c.counter + 1, message: newMessage.content, timestamp: ts } : c
+        );
+      }
+      return [...prev, { conversationId: newMessage.conversationId, counter: 1, message: newMessage.content, timestamp: ts }];
+    });
+  };
+
+  socket.on("message created", handler);
+
+  return () => {
+    socket.off("message created", handler);
+  };
+}, []);
+
+useEffect(() => {
+  if (selectedConversation?._id) {
+    setMessageCounters(prev => 
+      prev.map(counter => 
+        counter.conversationId === selectedConversation._id 
+          ? { ...counter, counter: 0 } 
+          : counter
+      )
+    );
+  }
+}, [selectedConversation]);
 
   const createConversation = async(contactId:string)=>{
     try{
@@ -114,6 +171,7 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
     <ConversationContext.Provider value={{
       userConversations,
       selectedConversation,
+      messageCounters,
       selectedConversationMessages,
       setSelectedConversation,
       setSelectedConversationMessages,

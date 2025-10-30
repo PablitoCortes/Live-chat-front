@@ -4,8 +4,8 @@ import { ChangeEvent, useState, KeyboardEvent, MouseEvent, useEffect } from 'rea
 import { Message } from '@/interfaces/Message';
 import { useUser } from '@/context/UserContext';
 import ChatSkeleton from '@/ux/components/ChatSkeleton';
-import MessageBubble from '../Message/Message';
 import { socket } from '@/socket/socket';
+import MessageBubble from '../Message/Message';
 
 export const Chat = () => {
   const {
@@ -45,12 +45,9 @@ export const Chat = () => {
         });
       }
     };
-  
-    // Scroll inicial
-    adjustScroll();
+      adjustScroll();
   
     return () => {
-      // Cleanup si es necesario
     };
   }, [selectedConversationMessages]);
 
@@ -124,7 +121,6 @@ export const Chat = () => {
 
   return (
     <main className="w-full flex flex-col bg-secondary h-full min-h-0 relative">
-      {/* HEADER */}
       <header className="w-full h-14 bg-primary flex items-center px-4 font-semibold text-lg gap-2 text-white flex-shrink-0 z-20">
         <button onClick={closeChat}>
           <ArrowLeft />
@@ -132,44 +128,23 @@ export const Chat = () => {
         {otherParticipant?.name}
       </header>
   
-      {/* MENSAJES */}
       <section
         id="messages"
         className="flex-1 px-5 bg-[url('/images/darkbackground.svg')] bg-cover bg-center pt-8 flex flex-col-reverse gap-2 overflow-y-auto overflow-x-hidden min-h-0 pb-20"
       >
         {selectedConversationMessages.map((message) => {
-          if (message.sender === user?._id) {
-            return (
-              <MessageBubble key={message._id} variant="sender">
-                <div className="flex gap-6 justify-center items-center">
-                  <span>{message.content}</span>
-                  <small className="self-end mt-1 text-[10px] text-dark">
-                    {new Date(message.timestamp).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </small>
-                </div>
-              </MessageBubble>
-            );
+          if(message.sender === user?._id){
+            return(
+              <MessageBubble key={message._id} variant='sender' message={message}/>
+            )
           }
-          return (
-            <MessageBubble key={message._id} variant="receiver">
-              <div className="flex gap-6 justify-center items-center">
-                <span>{message.content}</span>
-                <small className="self-end mt-1 text-[10px] text-dark">
-                  {new Date(message.timestamp).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </small>
-              </div>
-            </MessageBubble>
-          );
-        })}
+          return(
+            <MessageBubble key={message._id} variant='receiver' message={message}/>
+          )
+        })
+        }
       </section>
   
-      {/* INPUT (barra inferior) - FIXED en móviles */}
       <footer className="w-full flex justify-between items-center px-4 py-3 bg-secondary gap-4 border-t border-border flex-shrink-0 pb-safe fixed bottom-0 left-0 right-0 z-30 md:relative md:z-auto">
         <button className="w-8 h-8 flex justify-center items-center">
           <Plus size={20} />
@@ -197,7 +172,6 @@ export const Chat = () => {
       </footer>
     </main>
   );
-  
 };
 
 export default Chat;

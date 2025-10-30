@@ -16,10 +16,5 @@ export const authService ={
   logout: async () => {
     const response = await apiClient.post('/auth/logout');
     return response.data;
-  },
-
-  googleLogin: async () => {
-    const returnTo = "/api/auth/exchange";
-    window.location.href = `/api/auth/login?returnTo=${encodeURIComponent(returnTo)}&connection=google-oauth2`;
-  },
+  }
 }
