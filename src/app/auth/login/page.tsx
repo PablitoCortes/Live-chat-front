@@ -3,7 +3,7 @@
 import { LoginData } from '@/interfaces/User';
 import { ChangeEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/authContext';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AtSign, Eye, EyeOff, Lock } from 'lucide-react';
