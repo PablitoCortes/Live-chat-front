@@ -1,8 +1,8 @@
 import './globals.css'
 import type { Metadata } from 'next'
 
-import { outfit } from './fonts.ts'
-import { AuthProvider } from '@/context/authContext'
+import { outfit } from './fonts'
+import { AuthProvider } from '@/context/AuthContext'
 
 
 export const metadata: Metadata = {

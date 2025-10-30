@@ -13,7 +13,7 @@ import Chat from '@/components/Chat/Chat';
 import { useUser } from '@/context/UserContext';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/authContext';
+import { useAuth } from '@/context/AuthContext';
 import { AsideVariant } from '@/components/Aside/Aside.types';
 import { useConversation } from '@/context/ConversationContext';
 import { useContacts } from '@/context/ContactContext';
