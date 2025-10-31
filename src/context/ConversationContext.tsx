@@ -158,6 +158,11 @@ useEffect(() => {
   }
 }, [selectedConversation]);
 
+const closeChat=()=>{
+  setSelectedConversation(null)
+  setIsChatOpen(false)
+}
+
   const createConversation = async(contactId:string)=>{
     try{
       const response = await conversationService.createConversation(contactId)
@@ -182,7 +187,7 @@ useEffect(() => {
       isMessagesLoading,
       isChatOpen,
       openChat: () => setIsChatOpen(true),
-      closeChat: () => setIsChatOpen(false),
+      closeChat,
     }}>
       {children}
     </ConversationContext.Provider>

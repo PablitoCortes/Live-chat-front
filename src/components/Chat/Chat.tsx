@@ -17,7 +17,7 @@ export const Chat = () => {
   } = useConversation();
 
   const { user } = useUser();
-  const { closeChat } = useConversation();
+  const { closeChat,setSelectedConversation } = useConversation();
   const [message, setMessage] = useState<Message>({
     sender: '',
     receiver: '',

@@ -1,6 +1,5 @@
 import { Inter, Poppins, Nunito, Outfit } from 'next/font/google';
 
-// Configuración de fuentes modernas para la aplicación
 export const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
