@@ -5,7 +5,7 @@ import { useUser } from './UserContext';
 import { contactService } from '@/services/contactService';
 
 interface ContactContextType {
-  contacts: User[];
+  userContacts: User[];
   allContacts: User[];
   isContactsLoading: boolean;
   isAllContactsLoading: boolean;
@@ -16,7 +16,7 @@ interface ContactContextType {
 const ContactContext = createContext<ContactContextType | undefined>(undefined);
 
 export const ContactProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [contacts, setContacts] = useState<User[]>([]);
+  const [userContacts, setUserContacts] = useState<User[]>([]);
   const [allContacts, setAllContacts]= useState<User[]>([]);
   const [isAllContactsLoading, setIsAllContactsLoading] = useState(false);
   const [isContactsLoading, setIsContactsLoading] = useState(false);
@@ -46,11 +46,11 @@ useEffect(() => {
       setIsContactsLoading(true);
       const res = await contactService.getContacts();
       if(res.data){
-        setContacts(res.data);
+        setUserContacts(res.data);
       }
     } catch (err) {
       console.error('Error obteniendo contactos:', err);
-      setContacts([]);
+      setUserContacts([]);
     } finally {
       setIsContactsLoading(false);
     }
@@ -59,11 +59,10 @@ useEffect(() => {
   getUserContacts();
 }, [user, isProfileLoading]);
 
-
-  
   const addContact = useCallback(async (contactEmail: string) => {
     try {
-      await contactService.addContact(contactEmail);
+      const newContact = await contactService.addContact(contactEmail);
+      setUserContacts([...userContacts, newContact])
     } catch (err) {
       console.error('Error agregando contacto:', err);
       throw err;
@@ -75,7 +74,7 @@ useEffect(() => {
     try {
       const res = await contactService.deleteContact(contactId);
       if (res && res.data) {
-        setContacts(prevContacts => 
+        setUserContacts(prevContacts => 
           prevContacts.filter(contact => contact._id !== contactId)
         );
       }
@@ -88,12 +87,12 @@ useEffect(() => {
 
   return (
     <ContactContext.Provider value={{ 
-      contacts, 
+      userContacts, 
       isContactsLoading, 
       addContact, 
       deleteContact,
       isAllContactsLoading,
-      allContacts
+      allContacts,
     }}>
       {children}
     </ContactContext.Provider>

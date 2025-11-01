@@ -3,22 +3,25 @@ import { useContacts } from '@/context/ContactContext';
 import ContactCard from '../Cards/ContactCard';
 
 const ContactsAsideSection = () => {
-  const { contacts, isContactsLoading } = useContacts();
+  const { userContacts, isContactsLoading } = useContacts();
 
-  if (!isContactsLoading && contacts.length === 0) {
+  if (!isContactsLoading && userContacts.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-2xl text-plain text-center">
         You don´t have any contact
       </div>
     );
   }
+  
   return (
     <>
       <div className="flex-1 overflow-y-auto px-4 py-2">
         <div className="flex flex-col gap-2 p-4">
-          {contacts.map(cont => (
+          {userContacts.map(cont => (
+            
             <ContactCard key={cont._id} contact={cont} />
           ))}
+          
         </div>
       </div>
     </>

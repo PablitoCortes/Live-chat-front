@@ -100,6 +100,8 @@ export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ childr
         setIsConversationLoading(false)
       } 
     };
+
+    socket.on("new conversation",getConversations)
   
     getConversations();
   }, [user, isProfileLoading]);

@@ -20,12 +20,8 @@ const ChatCard: React.FC<ChatCardProps> = ({
   const { setSelectedConversation, openChat } = useConversation();
   const { user, isProfileLoading } = useUser();
 
-  const handleActiveConversation = async (conversation: Conversation) => {
-    try {
-      await setSelectedConversation(conversation);
-    } catch (err) {
-      console.error('Error al seleccionar la conversación:', err);
-    }
+  const handleActiveConversation =(conversation: Conversation) => {
+     setSelectedConversation(conversation);
   };
 
   if (isProfileLoading) {

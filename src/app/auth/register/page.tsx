@@ -10,9 +10,9 @@ import { AtSign, Eye, EyeOff, Lock, User } from 'lucide-react';
 
 const RegisterPage = () => {
   const [registerData, setRegisterData] = useState<RegisterData>({
+    name: '',
     email: '',
     password: '',
-    name: '',
   });
 
   const { register } = useAuth();
@@ -25,7 +25,7 @@ const RegisterPage = () => {
     e.preventDefault();
     setRegisterLoading(true);
     try {
-      await register(registerData.email, registerData.password, registerData.name);
+      await register(registerData.name,registerData.email, registerData.password, );
       setTimeout(()=>{
         setRegisterLoading(false);
         router.push('/home')
@@ -50,7 +50,6 @@ const RegisterPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-primary to-secondary">
-      {/* Círculos decorativos */}
       <div className="absolute top-0 left-0 w-64 h-64 bg-message/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
       <div className="absolute bottom-0 right-0 w-80 h-80 bg-message/20 rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
       

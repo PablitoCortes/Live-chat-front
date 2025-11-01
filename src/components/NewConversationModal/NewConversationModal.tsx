@@ -26,7 +26,7 @@ const NewConversationModal: React.FC<NewConversationModalProps> = ({
 
     try {
       if (contact && contact.email) {
-        await addContact(contact.email);
+         await addContact(contact.email);
       }
 
       socket.emit('new conversation', {
@@ -39,7 +39,6 @@ const NewConversationModal: React.FC<NewConversationModalProps> = ({
 
   useEffect(() => {
     const handleConversationCreated = (data:Conversation) => {
-      
       setSelectedConversation(data);
       setUserConversations([...userConversations, data]);
       setIsAddContactModalOpen(false);

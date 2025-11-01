@@ -24,9 +24,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
 
-  const register = async (email: string, name: string, password: string) => {
+  const register = async (name: string,email: string, password: string) => {
     try {
-      const data = await authService.register({ email, name, password });
+      const data = await authService.register({ name,email, password });
       return data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
